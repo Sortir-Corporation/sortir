@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -46,6 +48,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $active = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $campus = null;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'users')]
+    private Collection $partakenEvents;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'organizer', orphanRemoval: true)]
+    private Collection $createdEvents;
+
+    public function __construct()
+    {
+        $this->partakenEvents = new ArrayCollection();
+        $this->createdEvents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -184,6 +208,75 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive(bool $active): static
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): static
+    {
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getPartakenEvents(): Collection
+    {
+        return $this->partakenEvents;
+    }
+
+    public function addPartakenEvent(Event $partakenEvent): static
+    {
+        if (!$this->partakenEvents->contains($partakenEvent)) {
+            $this->partakenEvents->add($partakenEvent);
+            $partakenEvent->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartakenEvent(Event $partakenEvent): static
+    {
+        if ($this->partakenEvents->removeElement($partakenEvent)) {
+            $partakenEvent->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getCreatedEvents(): Collection
+    {
+        return $this->createdEvents;
+    }
+
+    public function addCreatedEvent(Event $createdEvent): static
+    {
+        if (!$this->createdEvents->contains($createdEvent)) {
+            $this->createdEvents->add($createdEvent);
+            $createdEvent->setOrganizer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedEvent(Event $createdEvent): static
+    {
+        if ($this->createdEvents->removeElement($createdEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($createdEvent->getOrganizer() === $this) {
+                $createdEvent->setOrganizer(null);
+            }
+        }
 
         return $this;
     }
