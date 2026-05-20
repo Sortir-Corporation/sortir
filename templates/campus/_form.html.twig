@@ -1,0 +1,17 @@
+{{ form_start(form) }}
+<div class="mb-3">
+    {{ form_label(form.name, "Nom du campus", {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Nantes'}}) }}
+    {{ form_errors(form.name) }}
+</div>
+
+
+<div class="mt-4">
+    <button type="submit" class="btn btn-primary">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+
+    <a href="{{ path('campus_campus_list') }}" class="btn btn-secondary">Annuler</a>
+
+</div>
+{{ form_end(form) }}

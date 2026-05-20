@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un campus{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Modifier le campus : {{ campus.name }}</h1>
+        <hr>
+
+        {# On inclut le même formulaire générique #}
+        {{ include('campus/_form.html.twig', {'button_label': 'Modifier le campus'}) }}
+
+        {# 4. LE BOUTON SUPPRIMER : Il s'affiche uniquement si le campus existe déjà (id présent) #}
+        {% if campus and campus.id %}
+            <button type="submit"
+                    formaction="{{ path('campus_delete', {'id': campus.id}) }}"
+                    formmethod="post"
+                    class="btn btn-danger"
+                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement le campus {{ campus.name }} ?');">
+                Supprimer le campus
+            </button>
+        {% endif %}
+    </div>
+{% endblock %}

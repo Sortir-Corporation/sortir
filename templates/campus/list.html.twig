@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des campus{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Liste des campus</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ville</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for c in campus %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.name }}</td>
+                <td>
+                    <a href="{{ path('campus_edit', {id: c.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+
+                    <form method="post" action="{{ path('campus_delete', {'id': c.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le campus {{ c.name }} ?');" style="display: inline;">
+
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ c.id) }}">
+
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Supprimer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-center">Aucun campus trouvé</td>
+            </tr>
+        {% endfor %}
+
+{#        2. La dernière ligne pour l'Ajout#}
+        <tr class="table-light border-top border-dark">
+            <td><em></em></td>
+            <td class="text-muted"><em>Ajouter un nouveau campus...</em></td>
+            <td class="text-center">
+                <a href="{{ path('campus_create') }}" class="btn btn-sm btn-success w-70">
+                    <i class="bi bi-plus-circle"></i> Ajouter
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
