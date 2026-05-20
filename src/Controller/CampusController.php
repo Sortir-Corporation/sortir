@@ -20,7 +20,7 @@ final class CampusController extends AbstractController
         // 1. On récupère la recherche (?q=...)
         $search = $request->query->get('q');
 
-// 2. On filtre si une recherche est lancée, sinon on prend tout
+        // 2. On filtre si une recherche est lancée, sinon on prend tout
         if ($search) {
             $campus = $campusRepository->findBySearch($search);
         } else {
@@ -31,6 +31,7 @@ final class CampusController extends AbstractController
             'campus' => $campus,
         ]);
     }
+
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
@@ -43,12 +44,13 @@ final class CampusController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Campus créé avec succès');
+
             return $this->redirectToRoute('campus_campus_list');
         }
 
         return $this->render('campus/new.html.twig', [
             'form' => $form->createView(),
-            'title' => 'Créer un campus'
+            'title' => 'Créer un campus',
         ]);
     }
 
@@ -62,6 +64,7 @@ final class CampusController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Campus modifié avec succès');
+
             return $this->redirectToRoute('campus_campus_list');
         }
 
@@ -74,9 +77,9 @@ final class CampusController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
     public function delete(Campus $campus, EntityManagerInterface $em): Response
     {
-            $em->remove($campus);
-            $em->flush();
-            $this->addFlash('success', 'Campus supprimé');
+        $em->remove($campus);
+        $em->flush();
+        $this->addFlash('success', 'Campus supprimé');
 
         return $this->redirectToRoute('campus_campus_list');
     }

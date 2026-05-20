@@ -20,7 +20,7 @@ class CampusRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.name LIKE :search')
-            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('search', '%'.$search.'%')
             ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->getResult();
