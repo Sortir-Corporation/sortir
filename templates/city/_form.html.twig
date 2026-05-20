@@ -1,0 +1,22 @@
+{{ form_start(form) }}
+<div class="mb-3">
+    {{ form_label(form.name, "Nom de la ville", {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Paris'}}) }}
+    {{ form_errors(form.name) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.zipCode, "Code Postal", {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.zipCode, {'attr': {'class': 'form-control', 'placeholder': 'Ex: 75000'}}) }}
+    {{ form_errors(form.zipCode) }}
+</div>
+
+<div class="mt-4">
+    <button type="submit" class="btn btn-primary">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+
+    <a href="{{ path('cities_city_list') }}" class="btn btn-secondary">Annuler</a>
+
+</div>
+{{ form_end(form) }}

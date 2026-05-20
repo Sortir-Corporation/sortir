@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une ville{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Modifier la ville : {{ city.name }}</h1>
+        <hr>
+
+        {# On inclut le même formulaire générique #}
+        {{ include('city/_form.html.twig', {'button_label': 'Modifier la ville'}) }}
+
+        {# 4. LE BOUTON SUPPRIMER : Il s'affiche uniquement si la ville existe déjà (id présent) #}
+        {% if city and city.id %}
+            <button type="submit"
+                    formaction="{{ path('cities_city_delete', {'id': city.id}) }}"
+                    formmethod="post"
+                    class="btn btn-danger"
+                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement la ville {{ city.name }} ?');">
+                Supprimer la ville
+            </button>
+        {% endif %}
+    </div>
+{% endblock %}

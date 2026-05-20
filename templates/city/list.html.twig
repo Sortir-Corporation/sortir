@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les villes{% endblock %}
+
+{% block body %}
+    <h1>Gérer les villes</h1>
+
+    <h3>Filtrer les villes</h3>
+
+        <form method="get" class="city filter">
+            <div>
+                <label for="search" class="visually-hidden">Nom de la ville</label>
+                <input type="text"
+                       id="search"
+                       name="q"
+                       class="form-control"
+                       placeholder="Le nom contient..."
+                       value="{{ app.request.query.get('q') }}">
+                {# Le 'value' ci-dessus permet de laisser le mot tapé dans la barre après la validation #}
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+                {% if app.request.query.get('q') %}
+                    <a href="{{ path(app.request.attributes.get('_route')) }}" class="btn btn-secondary">Réinitialiser</a>
+                {% endif %}
+            </div>
+        </form>
+
+    <hr>
+
+    <h3 class="mb-3">Liste des villes</h3>
+
+    <table class="table-cities">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom de la Ville</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for city in cities %}
+            <tr>
+                <td>{{ city.id }}</td>
+                <td><strong>{{ city.name }}</strong></td>
+                <td>
+                    <a href="{{ path('cities_city_edit', {'id': city.id}) }}" class="btn btn-sm btn-warning me-1">
+                        <i class="bi bi-pencil"></i> Modifier
+                    </a>
+
+                    <form method="post" action="{{ path('cities_city_delete', {'id': city.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer la ville {{ city.name }} ?');" style="display: inline;">
+
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ city.id) }}">
+
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Supprimer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>
+                    Aucune ville ne correspond à votre recherche.
+                </td>
+            </tr>
+        {% endfor %}
+
+         2. La dernière ligne pour l'Ajout
+        <tr class="table-light border-top border-dark">
+            <td><em></em></td>
+            <td class="text-muted"><em>Ajouter une nouvelle ville...</em></td>
+            <td class="text-center">
+                <a href="{{ path('cities_city_new') }}" class="btn btn-sm btn-success w-70">
+                    <i class="bi bi-plus-circle"></i> Ajouter
+                </a>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+
+{% endblock %}
