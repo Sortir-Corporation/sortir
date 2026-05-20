@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20260519135841 extends AbstractMigration
+final class Version20260520143139 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,7 +22,7 @@ final class Version20260519135841 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE campus (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE city (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, zip_code VARCHAR(50) NOT NULL, PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
-        $this->addSql('CREATE TABLE event (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, start_time DATETIME NOT NULL, duration INT NOT NULL, registration_deadline DATETIME NOT NULL, max_participants INT NOT NULL, event_info LONGTEXT DEFAULT NULL, status VARCHAR(50) NOT NULL, campus_id INT NOT NULL, organizer_id INT NOT NULL, location_id INT NOT NULL, INDEX IDX_3BAE0AA7AF5D55E1 (campus_id), INDEX IDX_3BAE0AA7876C4DDA (organizer_id), INDEX IDX_3BAE0AA764D218E (location_id), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE event (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, start_time DATETIME NOT NULL, duration INT NOT NULL, end_time DATETIME NOT NULL, registration_deadline DATETIME NOT NULL, max_participants INT NOT NULL, event_info LONGTEXT DEFAULT NULL, status VARCHAR(50) NOT NULL, campus_id INT NOT NULL, organizer_id INT NOT NULL, location_id INT NOT NULL, INDEX IDX_3BAE0AA7AF5D55E1 (campus_id), INDEX IDX_3BAE0AA7876C4DDA (organizer_id), INDEX IDX_3BAE0AA764D218E (location_id), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE event_user (event_id INT NOT NULL, user_id INT NOT NULL, INDEX IDX_92589AE271F7E88B (event_id), INDEX IDX_92589AE2A76ED395 (user_id), PRIMARY KEY (event_id, user_id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE location (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, street VARCHAR(255) NOT NULL, latitude DOUBLE PRECISION NOT NULL, longitude DOUBLE PRECISION DEFAULT NULL, city_id INT NOT NULL, INDEX IDX_5E9E89CB8BAC62AF (city_id), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE `user` (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, last_name VARCHAR(50) NOT NULL, first_name VARCHAR(255) NOT NULL, phone_number VARCHAR(50) NOT NULL, administrator TINYINT NOT NULL, active TINYINT NOT NULL, campus_id INT NOT NULL, INDEX IDX_8D93D649AF5D55E1 (campus_id), UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL (email), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
