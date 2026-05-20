@@ -15,10 +15,20 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CampusController extends AbstractController
 {
     #[Route('', name: 'campus_list', methods: ['GET'])]
-    public function list(CampusRepository $campusRepository): Response
+    public function list(CampusRepository $campusRepository, Request $request): Response
     {
+        // 1. On récupère la recherche (?q=...)
+        $search = $request->query->get('q');
+
+// 2. On filtre si une recherche est lancée, sinon on prend tout
+        if ($search) {
+            $campus = $campusRepository->findBySearch($search);
+        } else {
+            $campus = $campusRepository->findAll();
+        }
+
         return $this->render('campus/list.html.twig', [
-            'campus' => $campusRepository->findAll(),
+            'campus' => $campus,
         ]);
     }
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
