@@ -7,6 +7,9 @@
 
 
 <div>
+
+    {{ form_rest(form) }}
+
     <button type="submit" class="btn btn-primary">
         {{ button_label|default('Enregistrer') }}
     </button>
@@ -14,4 +17,5 @@
     <a href="{{ path('campus_campus_list') }}" class="btn btn-secondary">Annuler</a>
 
 </div>
-{{ form_end(form) }}
+
+{{ form_end(form, {'render_rest': false}) }}

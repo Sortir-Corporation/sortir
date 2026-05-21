@@ -21,10 +21,10 @@ class EventType extends AbstractType
             ->add('registrationDeadline')
             ->add('maxParticipants')
             ->add('eventInfo')
-            ->add('campus', EntityType::class, [
-                'class' => Campus::class,
-                'choice_label' => 'id',
-            ])
+//            ->add('campus', EntityType::class, [
+//                'class' => Campus::class,
+//                'choice_label' => 'id',
+//            ])
             ->add('location', EntityType::class, [
                 'class' => Location::class,
                 'choice_label' => 'name',
