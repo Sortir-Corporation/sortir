@@ -16,6 +16,16 @@ class CampusRepository extends ServiceEntityRepository
         parent::__construct($registry, Campus::class);
     }
 
+    public function findBySearch(string $search): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.name LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Campus[] Returns an array of Campus objects
     //     */
@@ -31,13 +41,13 @@ class CampusRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Campus
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+//    public function findOneBySomeField($value): ?Campus
+//    {
+//        return $this->createQueryBuilder('c')
+//            ->andWhere('c.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }
