@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="event-creation-container">
+        <h1>Create a New Event</h1>
+
+        {# Display any flash messages here #}
+        <div class="flash-messages">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="flash-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        {# Start the form with a custom wrapper class #}
+        {{ form_start(eventForm, {'attr': {'class': 'custom-event-form'}}) }}
+
+        {# SECTION 1: General Information #}
+        <fieldset class="form-section">
+            <legend>General Details</legend>
+
+            <div class="form-group">
+                {{ form_label(eventForm.name, 'Event Name') }}
+                {{ form_widget(eventForm.name, {'attr': {'class': 'form-input'}}) }}
+                <div class="form-error">
+                    {{ form_errors(eventForm.name) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(eventForm.eventInfo, 'Description & Info') }}
+                {{ form_widget(eventForm.eventInfo, {'attr': {'class': 'form-textarea'}}) }}
+                <div class="form-error">
+                    {{ form_errors(eventForm.eventInfo) }}
+                </div>
+            </div>
+        </fieldset>
+
+        {# SECTION 2: Schedule & Timing #}
+        <fieldset class="form-section">
+            <legend>Schedule</legend>
+
+            <div class="form-group-row"> {# Use this class to put these side-by-side later in CSS #}
+                <div class="form-group">
+                    {{ form_label(eventForm.startTime, 'Start Time') }}
+                    {{ form_widget(eventForm.startTime, {'attr': {'class': 'form-input'}}) }}
+                    <div class="form-error">
+                        {{ form_errors(eventForm.startTime) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(eventForm.duration, 'Duration (minutes)') }}
+                    {{ form_widget(eventForm.duration, {'attr': {'class': 'form-input'}}) }}
+                    <div class="form-error">
+                        {{ form_errors(eventForm.duration) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(eventForm.registrationDeadline, 'Registration Deadline') }}
+                {{ form_widget(eventForm.registrationDeadline, {'attr': {'class': 'form-input'}}) }}
+                <div class="form-error">
+                    {{ form_errors(eventForm.registrationDeadline) }}
+                </div>
+            </div>
+        </fieldset>
+
+        {# SECTION 3: Logistics #}
+        <fieldset class="form-section">
+            <legend>Logistics & Capacity</legend>
+
+            <div class="form-group">
+                {{ form_label(eventForm.maxParticipants, 'Maximum Participants') }}
+                {{ form_widget(eventForm.maxParticipants, {'attr': {'class': 'form-input'}}) }}
+                <div class="form-error">
+                    {{ form_errors(eventForm.maxParticipants) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(eventForm.campus, 'Campus') }}
+                {{ form_widget(eventForm.campus, {'attr': {'class': 'form-select'}}) }}
+                <div class="form-error">
+                    {{ form_errors(eventForm.campus) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(eventForm.location, 'Location') }}
+                {{ form_widget(eventForm.location, {'attr': {'class': 'form-select'}}) }}
+                <div class="form-error">
+                    {{ form_errors(eventForm.location) }}
+                </div>
+            </div>
+        </fieldset>
+
+        {# Submit Button #}
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Create Event</button>
+        </div>
+
+        {{ form_end(eventForm) }}
+    </div>
+{% endblock %}
