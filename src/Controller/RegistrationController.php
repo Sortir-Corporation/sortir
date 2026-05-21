@@ -25,7 +25,6 @@ class RegistrationController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
 
             // 1. Gestion de l'upload de la photo de profil
-            /** @var $pictureFile */
             $pictureFile = $form->get('profilePicture')->getData();
 
             if ($pictureFile) {
@@ -35,7 +34,7 @@ class RegistrationController extends AbstractController
                 try {
                     // Déplacer le fichier dans le dossier public/uploads/profiles
                     $pictureFile->move(
-                        $this->getParameter('kernel.project_dir') . '/public/uploads/profiles',
+                        $this->getParameter('kernel.project_dir').'/public/uploads/profiles',
                         $newFilename
                     );
 

@@ -276,6 +276,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfilePicture(string $profilePicture): static
     {
         $this->profilePicture = $profilePicture;
+
         return $this;
     }
 
@@ -293,6 +294,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->alias = $alias;
     }
-
-
 }

@@ -8,10 +8,10 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -25,20 +25,19 @@ class RegistrationFormType extends AbstractType
     {
         $builder
 
-            ->add('alias', TextType::class,[
+            ->add('alias', TextType::class, [
                 'label' => 'Pseudo'])
 
-            ->add('firstName', TextType::class,[
+            ->add('firstName', TextType::class, [
                 'label' => 'Prénom'])
 
-
-            ->add('lastName', TextType::class,[
+            ->add('lastName', TextType::class, [
                 'label' => 'Nom'])
 
-            ->add('phoneNumber', TextType::class,[
+            ->add('phoneNumber', TextType::class, [
                 'label' => 'Téléphone'])
 
-            ->add('email', EmailType::class,[
+            ->add('email', EmailType::class, [
                 'label' => 'Email'])
 
             ->add('plainPassword', RepeatedType::class, options: [
@@ -46,7 +45,7 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
-                'first_options'  => ['label' => 'Mot de passe'],
+                'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmer le mot de passe'],
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
@@ -84,7 +83,7 @@ class RegistrationFormType extends AbstractType
                             'image/webp',
                         ],
                         'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG ou WEBP)',
-                    ])
+                    ]),
                 ],
             ])
 
