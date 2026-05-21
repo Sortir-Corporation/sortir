@@ -40,4 +40,13 @@ class LocationRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findBySearch(mixed $search)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.name LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
+            ->orderBy('l.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

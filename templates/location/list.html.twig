@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les lieux{% endblock %}
+
+{% block body %}
+    <h1>Gérer les lieux</h1>
+
+    <h3>Filtrer les lieux</h3>
+
+    <form method="get" class="location filter">
+        <div>
+            <label for="search" class="visually-hidden">Nom du lieu</label>
+            <input type="text"
+                   id="search"
+                   name="q"
+                   class="form-control"
+                   placeholder="Le nom contient..."
+                   value="{{ app.request.query.get('l') }}">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+            {% if app.request.query.get('l') %}
+                <a href="{{ path(app.request.attributes.get('_route')) }}" class="btn btn-secondary">Réinitialiser</a>
+            {% endif %}
+        </div>
+    </form>
+
+    <hr>
+
+    <h3 class>Liste des lieux</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom du Lieu</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for location in locations %}
+            <tr>
+                <td>{{ location.id }}</td>
+                <td><strong>{{ location.name }}</strong></td>
+                <td>
+                    <a href="{{ path('location_edit', {'id': location.id}) }}" class="btn btn-sm btn-warning me-1">
+                        <i class="bi bi-pencil"></i> Modifier
+                    </a>
+
+                    <form method="post" action="{{ path('location_delete', {'id': location.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le lieu {{ location.name }} ?');" style="display: inline;">
+
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ location.id) }}">
+
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Supprimer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>
+                    Aucun lieu ne correspond à votre recherche.
+                </td>
+            </tr>
+        {% endfor %}
+
+        2. La dernière ligne pour l'Ajout
+        <tr class="table-light border-top border-dark">
+            <td><em></em></td>
+            <td class="text-muted"><em>Ajouter un nouveau lieu...</em></td>
+            <td class="text-center">
+                <a href="{{ path('location_create') }}" class="btn btn-sm btn-success w-70">
+                    <i class="bi bi-plus-circle"></i> Ajouter
+                </a>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+
+{% endblock %}

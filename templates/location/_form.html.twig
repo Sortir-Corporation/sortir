@@ -1,0 +1,34 @@
+{{ form_start(locationForm) }}
+<div class>
+    {{ form_label(locationForm.name, "Nom du lieu", {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(locationForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Paris'}}) }}
+    {{ form_errors(locationForm.name) }}
+</div>
+
+<div class>
+    {{ form_label(locationForm.street, 'Numéro et nom de la rue', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(locationForm.street, {'attr': {'class': 'form-control', 'placeholder': 'Ex: 8 rue des mouettes'}}) }}
+    {{ form_errors(locationForm.street) }}
+</div>
+
+<div class>
+    {{ form_row(locationForm.city) }}
+</div>
+
+<div class>
+    {{ form_row(locationForm.latitude) }}
+</div>
+
+<div class>
+    {{ form_row(locationForm.longitude) }}
+</div>
+
+<div class>
+    <button type="submit" class="btn btn-primary">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+
+    <a href="{{ path('location_list') }}" class="btn btn-secondary">Annuler</a>
+
+</div>
+{{ form_end(locationForm) }}

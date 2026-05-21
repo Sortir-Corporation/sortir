@@ -3,11 +3,9 @@
 {% block title %}Ajouter une ville{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
+    <div>
         <h1>Ajouter une nouvelle ville</h1>
         <hr>
-
-        {# On inclut le formulaire générique #}
         {{ include('city/_form.html.twig', {'button_label': 'Créer la ville'}) }}
     </div>
 {% endblock %}

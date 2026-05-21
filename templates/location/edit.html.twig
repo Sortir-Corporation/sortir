@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un lieu{% endblock %}
+
+{% block body %}
+    <div class>
+        <h1>Modifier le lieu : {{ location.name }}</h1>
+        <hr>
+
+        {# On inclut le même formulaire générique #}
+        {{ include('location/_form.html.twig', {'button_label': 'Modifier le lieu'}) }}
+
+        {# 4. LE BOUTON SUPPRIMER : Il s'affiche uniquement si le lieu existe déjà (id présent) #}
+        {% if location and location.id %}
+            <button type="submit"
+                    formaction="{{ path('location_delete', {'id': location.id}) }}"
+                    formmethod="post"
+                    class="btn btn-danger"
+                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement le lieu {{ location.name }} ?');">
+                Supprimer le lieu
+            </button>
+        {% endif %}
+    </div>
+{% endblock %}
