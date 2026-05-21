@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails Utilisateur{% endblock %}
+
+{% block body %}
+<h1>Détails du profil</h1>
+
+    <div>
+        <div>
+            <ul>
+                <li>Pseudo : {{ user.alias }}</li>
+                <li>Prénom : {{ user.firstName }}</li>
+                <li>Nom : {{ user.lastName }}</li>
+                <li>Téléphone : {{ user.phoneNumber }}</li>
+                <li>Email : {{ user.email }}</li>
+                <li>Mot de passe : {{ user.password }}</li>
+                <li>Campus : {{ user.campus.name }}</li>
+                <li>Ma photo : {{ user.profilePicture }}</li>
+            </ul>
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
