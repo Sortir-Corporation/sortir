@@ -22,18 +22,8 @@ class EventType extends AbstractType
             ->add('registrationDeadline')
             ->add('maxParticipants')
             ->add('eventInfo')
-            ->add('status')
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'choice_label' => 'id',
-            ])
-            ->add('users', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            ->add('organizer', EntityType::class, [
-                'class' => User::class,
                 'choice_label' => 'id',
             ])
             ->add('location', EntityType::class, [

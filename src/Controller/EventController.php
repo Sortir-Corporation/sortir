@@ -21,6 +21,12 @@ final class EventController extends AbstractController
         EntityManagerInterface $entityManager,
     ): Response {
         $event = new Event();
+
+        $user = $this->getUser();
+
+        $event->setOrganizer($user);
+        $event->setCampus($user->getCampus());
+
         $eventForm = $this->createForm(EventType::class, $event, [
             'action' => $this->generateUrl('events_create'),
             'method' => 'POST',
