@@ -21,7 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
     /**
@@ -35,6 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(length: 50, unique: true)]
+    private ?string $alias = null;
 
     #[ORM\Column(length: 50)]
     private ?string $lastName = null;
@@ -51,6 +54,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $campus = null;
+
+    private ?string $profilePicture = null;
 
     /**
      * @var Collection<int, Event>
@@ -267,4 +272,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function setProfilePicture(string $profilePicture): static
+    {
+        $this->profilePicture = $profilePicture;
+        return $this;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function getAlias(): ?string
+    {
+        return $this->alias;
+    }
+
+    public function setAlias(?string $alias): void
+    {
+        $this->alias = $alias;
+    }
+
+
 }

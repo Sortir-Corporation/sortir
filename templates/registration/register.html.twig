@@ -3,18 +3,37 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <h1>Créer son compte</h1>
 
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.lastName) }}
+
+        {{ form_row(registrationForm.alias) }}
+
         {{ form_row(registrationForm.firstName) }}
+
+        {{ form_row(registrationForm.lastName) }}
+
         {{ form_row(registrationForm.phoneNumber) }}
+
+        {{ form_row(registrationForm.email) }}
+
+        {# On affiche la première ligne (le mot de passe) #}
+        {{ form_row(registrationForm.plainPassword.first, {
+            label: 'Mot de passe'
+        }) }}
+
+        {# On ajoute la deuxième ligne (la confirmation) #}
+        {{ form_row(registrationForm.plainPassword.second, {
+            label: 'Confirmer le mot de passe'
+        }) }}
+
+        {{ form_row(registrationForm.campus) }}
+
+        {# Ajout du champ pour la photo de profil #}
+        {{ form_row(registrationForm.profilePicture) }}
+
         {{ form_row(registrationForm.agreeTerms) }}
 
         <button type="submit" class="btn">Register</button>
