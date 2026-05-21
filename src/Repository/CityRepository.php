@@ -18,10 +18,10 @@ class CityRepository extends ServiceEntityRepository
 
     public function findBySearch(string $search): array
     {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.nom LIKE :search')
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.name LIKE :search')
             ->setParameter('search', '%'.$search.'%')
-            ->orderBy('v.nom', 'ASC')
+            ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
