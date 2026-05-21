@@ -50,7 +50,7 @@ final class LocationController extends AbstractController
 
         return $this->render('location/new.html.twig', [
             'locationForm' => $form->createView(),
-            'title' => 'Ajout d\'une lieu'
+            'title' => 'Ajout d\'une lieu',
         ]);
     }
 
@@ -64,23 +64,23 @@ final class LocationController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Le lieu a bien été modifié');
+
             return $this->redirectToRoute('location_list');
         }
-
 
         return $this->render('location/edit.html.twig', [
             'locationForm' => $form->createView(),
             'location' => $location,
         ]);
-      }
+    }
 
-      #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
-      public function delete(Location $location, EntityManagerInterface $entityManager): Response
-      {
-          $entityManager->remove($location);
-          $entityManager->flush();
-          $this->addFlash('success', 'Le lieu a bien été supprimé');
+    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
+    public function delete(Location $location, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($location);
+        $entityManager->flush();
+        $this->addFlash('success', 'Le lieu a bien été supprimé');
 
-          return $this->redirectToRoute('location_list');
-      }
+        return $this->redirectToRoute('location_list');
+    }
 }
