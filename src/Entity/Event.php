@@ -293,7 +293,7 @@ class Event
 
     public function isPublished(): bool
     {
-        return $this->getStatus() === EventStatus::OPEN;
+        return EventStatus::OPEN === $this->getStatus();
     }
 
     public function isRegistrationOpen(): bool
@@ -310,5 +310,4 @@ class Event
     {
         return $this->users->contains($user);
     }
-
 }

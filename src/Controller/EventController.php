@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\User;
 use App\Enum\EventStatus;
 use App\Form\EventType;
-use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,31 +53,33 @@ final class EventController extends AbstractController
     #[Route('/{id}/register', name: 'register', methods: ['GET', 'POST'])]
     public function register(
         Event $event,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ): Response {
-        if (!$event->isPublished()){
+        if (!$event->isPublished()) {
             $this->addFlash('error', 'Event is not published');
-//            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
+            //            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
         }
 
-        if (!$event->isRegistrationOpen()){
+        if (!$event->isRegistrationOpen()) {
             $this->addFlash('error', 'Registration deadline has passed');
-//            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
+            //            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
         }
 
         if (!$event->hasFreeSlots()) {
             $this->addFlash('error', 'This event is full');
-//            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
+            //            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
         }
 
         $user = $this->getUser();
-        if (!$user){
+        if (!$user) {
             $this->addFlash('error', 'You must be logged in to register');
+
             return $this->redirectToRoute('app_login');
         }
 
         if ($event->getUsers()->contains($user)) {
             $this->addFlash('info', 'Vous êtes déjà inscrit.');
+
             return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
         }
 
@@ -87,8 +87,8 @@ final class EventController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'Inscription réussie !');
-        return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
 
+        return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
     }
 
     #[Route('/{id}', name: 'details', methods: ['GET'])]
@@ -107,12 +107,14 @@ final class EventController extends AbstractController
 
         if (!$user) {
             $this->addFlash('error', 'You must be logged in to unregister.');
+
             return $this->redirectToRoute('app_login');
         }
 
         // 2. On vérifie d'ABORD si l'événement est encore ouvert aux modifications
-        if ($event->getStatus() !== EventStatus::OPEN) {
+        if (EventStatus::OPEN !== $event->getStatus()) {
             $this->addFlash('error', 'You cannot unregister because this event is no longer open.');
+
             return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
         }
 
@@ -128,6 +130,4 @@ final class EventController extends AbstractController
 
         return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
     }
-
-
 }
