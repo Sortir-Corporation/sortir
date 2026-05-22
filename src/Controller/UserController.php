@@ -19,7 +19,7 @@ final class UserController extends AbstractController
     public function details(User $user): Response
     {
         // Seul l'utilisateur connecté puisse voir son propre profil
-//        $this->denyAccessUnlessGranted('SAME_USER', $user);
+        //        $this->denyAccessUnlessGranted('SAME_USER', $user);
 
         return $this->render('user/details.html.twig', [
             'user' => $user,
@@ -33,15 +33,13 @@ final class UserController extends AbstractController
         User $user,
         EntityManagerInterface $em,
         CampusRepository $campusRepository,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
     ): Response {
-
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         // Si l'utilisateur a cliqué sur "MODIFIER"
         if ($form->isSubmitted() && $form->isValid()) {
-
             // 2. On récupère la valeur du champ password
             $newPassword = $form->get('password')->getData();
 
@@ -82,14 +80,7 @@ final class UserController extends AbstractController
         }
 
         $this->addFlash('error', 'Token CSRF invalide, suppression annulée.');
+
         return $this->redirectToRoute('user_details', ['id' => $user->getId()]);
     }
-
 }
-
-
-
-
-
-
-

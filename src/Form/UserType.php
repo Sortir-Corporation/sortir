@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Campus;
-use App\Entity\Event;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -33,22 +32,21 @@ class UserType extends AbstractType
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
                 'required' => false,
                 'mapped' => false, // pour avoir un champ vide
-                'first_options'  => [
+                'first_options' => [
                     'label' => 'Nouveau mot de passe :',
                     'attr' => [
                         'placeholder' => 'Laisser vide pour inchangé',
-                        'autocomplete' => 'new-password' // <-- Force le navigateur à ne rien remplir
-                        ]
+                        'autocomplete' => 'new-password', // <-- Force le navigateur à ne rien remplir
+                    ],
                 ],
                 'second_options' => [
                     'label' => 'Confirmer le mot de passe :',
                     'attr' => [
                         'placeholder' => 'Répétez le mot de passe',
-                        'value' => '' // Force le champ HTML à être vide au chargement
+                        'value' => '', // Force le champ HTML à être vide au chargement
                     ],
                 ],
             ])
-
 
             ->add('active')
             ->add('profilePicture', FileType::class, [
@@ -63,7 +61,7 @@ class UserType extends AbstractType
                             'image/png',
                         ],
                         'mimeTypesMessage' => 'image PNG ou JPEG valide inférieure à 1024K',
-                    ])
+                    ]),
                 ],
             ]);
     }
