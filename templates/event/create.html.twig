@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="event-creation-container">
+    {# We combine the layout class (.form-container) with the visual class (.glass-panel) #}
+    <div class="form-container glass-panel">
         <h1>Create a New Event</h1>
 
         {# Display any flash messages here #}
@@ -15,8 +16,7 @@
             {% endfor %}
         </div>
 
-        {# Start the form with a custom wrapper class #}
-        {{ form_start(eventForm, {'attr': {'class': 'custom-event-form'}}) }}
+        {{ form_start(eventForm) }}
 
         {# SECTION 1: General Information #}
         <fieldset class="form-section">
@@ -24,7 +24,7 @@
 
             <div class="form-group">
                 {{ form_label(eventForm.name, 'Event Name') }}
-                {{ form_widget(eventForm.name, {'attr': {'class': 'form-input'}}) }}
+                {{ form_widget(eventForm.name) }}
                 <div class="form-error">
                     {{ form_errors(eventForm.name) }}
                 </div>
@@ -32,7 +32,7 @@
 
             <div class="form-group">
                 {{ form_label(eventForm.eventInfo, 'Description & Info') }}
-                {{ form_widget(eventForm.eventInfo, {'attr': {'class': 'form-textarea'}}) }}
+                {{ form_widget(eventForm.eventInfo) }}
                 <div class="form-error">
                     {{ form_errors(eventForm.eventInfo) }}
                 </div>
@@ -43,10 +43,10 @@
         <fieldset class="form-section">
             <legend>Schedule</legend>
 
-            <div class="form-group-row"> {# Use this class to put these side-by-side later in CSS #}
+            <div class="form-group-row">
                 <div class="form-group">
                     {{ form_label(eventForm.startTime, 'Start Time') }}
-                    {{ form_widget(eventForm.startTime, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_widget(eventForm.startTime) }}
                     <div class="form-error">
                         {{ form_errors(eventForm.startTime) }}
                     </div>
@@ -54,7 +54,7 @@
 
                 <div class="form-group">
                     {{ form_label(eventForm.duration, 'Duration (minutes)') }}
-                    {{ form_widget(eventForm.duration, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_widget(eventForm.duration) }}
                     <div class="form-error">
                         {{ form_errors(eventForm.duration) }}
                     </div>
@@ -63,7 +63,7 @@
 
             <div class="form-group">
                 {{ form_label(eventForm.registrationDeadline, 'Registration Deadline') }}
-                {{ form_widget(eventForm.registrationDeadline, {'attr': {'class': 'form-input'}}) }}
+                {{ form_widget(eventForm.registrationDeadline) }}
                 <div class="form-error">
                     {{ form_errors(eventForm.registrationDeadline) }}
                 </div>
@@ -74,36 +74,31 @@
         <fieldset class="form-section">
             <legend>Logistics & Capacity</legend>
 
-            <div class="form-group">
-                {{ form_label(eventForm.maxParticipants, 'Maximum Participants') }}
-                {{ form_widget(eventForm.maxParticipants, {'attr': {'class': 'form-input'}}) }}
-                <div class="form-error">
-                    {{ form_errors(eventForm.maxParticipants) }}
+            <div class="form-group-row">
+                <div class="form-group">
+                    {{ form_label(eventForm.maxParticipants, 'Maximum Participants') }}
+                    {{ form_widget(eventForm.maxParticipants) }}
+                    <div class="form-error">
+                        {{ form_errors(eventForm.maxParticipants) }}
+                    </div>
                 </div>
-            </div>
 
-{#            <div class="form-group">#}
-{#                {{ form_label(eventForm.campus, 'Campus') }}#}
-{#                {{ form_widget(eventForm.campus, {'attr': {'class': 'form-select'}}) }}#}
-{#                <div class="form-error">#}
-{#                    {{ form_errors(eventForm.campus) }}#}
-{#                </div>#}
-{#            </div>#}
-
-            <div class="form-group">
-                {{ form_label(eventForm.location, 'Location') }}
-                {{ form_widget(eventForm.location, {'attr': {'class': 'form-select'}}) }}
-                <div class="form-error">
-                    {{ form_errors(eventForm.location) }}
+                <div class="form-group">
+                    {{ form_label(eventForm.location, 'Location') }}
+                    {{ form_widget(eventForm.location) }}
+                    <div class="form-error">
+                        {{ form_errors(eventForm.location) }}
+                    </div>
                 </div>
             </div>
         </fieldset>
 
         {# Submit Button #}
         <div class="form-actions">
-            <button type="submit" class="btn-submit">Create Event</button>
+            <button type="submit" class="btn-primary">Create Event</button>
         </div>
 
+        {# This will now close the form cleanly without dumping any forgotten fields! #}
         {{ form_end(eventForm) }}
     </div>
 {% endblock %}

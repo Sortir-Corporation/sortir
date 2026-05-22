@@ -52,3 +52,16 @@ h1, h2, h3, h4, h5, h6 {
 #root, #__next {
     isolation: isolate;
 }
+
+/* 11. Remove link decoration */
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ /* 12. Remove list styling */
+
+ul li {
+    list-style: none;
+}

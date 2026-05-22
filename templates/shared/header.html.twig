@@ -1,11 +1,35 @@
 <header>
-    <nav class="navbar">
-
-        <ul class="nav-links">
-            <li><a href="{{ path('cities_city_list') }}">Villes</a></li>
-            <li><a href="{{ path('campus_campus_list') }}">Campus</a></li>
-            <li><a href="{{ path('app_home') }}">Accueil</a></li>
-            <li><a href="{{ path('app_login') }}">Se connecter</a></li>
-        </ul>
-    </nav>
+    <div class="header-container glass-panel">
+        <a href="{{ path('app_home') }}">
+            <h1 class="logo-title">Sortir.com</h1>
+        </a>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li>
+                    <a href="{{ path('app_home') }}"
+                       class="{{ app.request.attributes.get('_route') == 'app_home' ? 'active' : '' }}">
+                        Accueil
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('cities_city_list') }}"
+                       class="{{ app.request.attributes.get('_route') == 'cities_city_list' ? 'active' : '' }}">
+                        Villes
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('campus_campus_list') }}"
+                       class="{{ app.request.attributes.get('_route') == 'campus_campus_list' ? 'active' : '' }}">
+                        Campus
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_login') }}"
+                       class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">
+                        Se connecter
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </header>

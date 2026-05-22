@@ -1,0 +1,24 @@
+.glass-panel {
+    /* The transparent background */
+    background: rgba(255, 255, 255, 0.08);
+
+    /* The blur */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    /* The faint outer edge */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    /* The razor-sharp inner highlight and outer drop shadow */
+    box-shadow: inset 0 1px 0px rgba(255, 255, 255, 0.3),
+    0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+html {
+    /* Tells the browser to always stop scrolling 6rem before the top,
+       leaving plenty of room for your sticky header! */
+    scroll-padding-top: 6rem;
+
+    /* Optional: Makes jumping to anchor links a smooth animation */
+    scroll-behavior: smooth;
+}
