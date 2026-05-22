@@ -19,17 +19,13 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
 
-            # Elle indique à Symfony d'utiliser votre formulaire de connexion habituel comme point d'entrée
-            entry_point: form_login
+            # C'est ton authenticateur qui gère tout (formulaire et redirection)
+            custom_authenticator: App\Security\AppUserAuthenticator
+            entry_point: App\Security\AppUserAuthenticator
 
             logout:
                 path: app_logout
-            custom_authenticator: App\Security\AppUserAuthenticator
 
             remember_me:
                 secret: '%kernel.secret%'

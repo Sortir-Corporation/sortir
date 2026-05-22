@@ -2,34 +2,47 @@
 
 {% block title %}Détails Utilisateur{% endblock %}
 
+
 {% block body %}
 <h1>Détails du profil</h1>
 
     <div>
         <div>
-            <ul>
-                <li>Pseudo : {{ user.alias }}</li>
-                <li>Prénom : {{ user.firstName }}</li>
-                <li>Nom : {{ user.lastName }}</li>
-                <li>Téléphone : {{ user.phoneNumber }}</li>
-                <li>Email : {{ user.email }}</li>
-                <li>Mot de passe : {{ user.password }}</li>
-                <li>Campus : {{ user.campus.name }}</li>
-                <li>Ma photo : {{ user.profilePicture }}</li>
-            </ul>
+            <span class="label">Pseudo :</span>
+            <span class="value">{{ user.alias }}</span>
+        </div>
+        <div>
+            <span class="label">Prénom :</span>
+            <span class="value">{{ user.firstName }}</span>
+        </div>
+        <div>
+            <span class="label">Nom :</span>
+            <span class="value">{{ user.lastName }}</span>
+        </div>
+        <div>
+            <span class="label">Téléphone :</span>
+            <span class="value">{{ user.phoneNumber }}</span>
+        </div>
+        <div>
+            <span class="label">Email :</span>
+            <span class="value">{{ user.email }}</span>
+        </div>
+        <div>
+            <span class="label">Mot de passe :</span>
+            <span class="value">{{ user.password }}</span>
+        </div>
+        <div>
+            <span class="label">Campus :</span>
+            <span class="value">{{ user.campus.name }}</span>
+        </div>
+        <div>
+            <span class="label">Ma photo :</span>
+            <span class="value">{{ user.profilePicture }}</span>
         </div>
 
-
-
+        <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-warning">
+            Modifier / Supprimer mon compte
+        </a>
     </div>
-
-
-
-
-
-
-
-
-
 
 {% endblock %}

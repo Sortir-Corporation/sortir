@@ -5,6 +5,10 @@
             <li><a href="{{ path('cities_city_list') }}">Villes</a></li>
             <li><a href="{{ path('campus_campus_list') }}">Campus</a></li>
             <li><a href="{{ path('app_home') }}">Accueil</a></li>
+            {# Si l'utilisateur est connecté #}
+            {% if app.user %}
+                <li><a href="{{ path('user_details', {'id': app.user.id}) }}">Mon Profil</a></li>
+            {% endif %}
             <li><a href="{{ path('app_login') }}">Se connecter</a></li>
         </ul>
     </nav>

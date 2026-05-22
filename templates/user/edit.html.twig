@@ -1,0 +1,96 @@
+<div class="profile-container">
+    <h2>Modifier le profil</h2>
+
+    {# 1. FORMULAIRE DE MODIFICATION #}
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+    {# Erreurs globales si le formulaire échoue #}
+    {{ form_errors(form) }}
+
+    {# Case à cocher pour désactiver le compte #}
+    <div>
+        {{ form_row(form.active, {'label': 'Désactiver le compte (Action Admin)'}) }}
+    </div>
+
+    <hr>
+
+    {# 2. CHAMPS DU FORMULAIRE #}
+    {# Utiliser form_row() est plus propre car Symfony gère automatiquement le label, les erreurs et le widget #}
+
+    <div>
+        {{ form_label(form.alias, 'Pseudo :') }}
+        {{ form_widget(form.alias) }}
+        {{ form_errors(form.alias) }}
+    </div>
+
+    <div>
+        {{ form_label(form.firstName, 'Prénom :') }}
+        {{ form_widget(form.firstName) }}
+        {{ form_errors(form.firstName) }}
+    </div>
+
+    <div>
+        {{ form_label(form.lastName, 'Nom :') }}
+        {{ form_widget(form.lastName) }}
+        {{ form_errors(form.lastName) }}
+    </div>
+
+    <div>
+        {{ form_label(form.phoneNumber, 'Téléphone :') }}
+        {{ form_widget(form.phoneNumber) }}
+        {{ form_errors(form.phoneNumber) }}
+    </div>
+
+    <div>
+        {{ form_label(form.email, 'Email :') }}
+        {{ form_widget(form.email) }}
+        {{ form_errors(form.email) }}
+    </div>
+
+    <div>
+        {{ form_label(form.password.first, 'Nouveau mot de passe (laisser vide pour inchangé) :') }}
+        {{ form_widget(form.password.first, {'attr': {'placeholder': 'Nouveau mot de passe'}}) }}
+        {{ form_errors(form.password.first) }}
+    </div>
+
+    <div>
+        {{ form_label(form.password.second) }}
+        {{ form_widget(form.password.second) }}
+        {{ form_errors(form.password.second) }}
+    </div>
+
+    <div>
+        {{ form_label(form.campus, 'Campus :') }}
+        {{ form_widget(form.campus) }}
+        {{ form_errors(form.campus) }}
+    </div>
+
+    <div>
+        {{ form_label(form.profilePicture, 'Modifier la photo :') }}
+        {% if user.profilePicture %}
+            <div>
+                <img src="{{ asset('uploads/avatars/' ~ user.profilePicture) }}" alt="Photo actuelle" width="80">
+            </div>
+        {% endif %}
+        {{ form_widget(form.profilePicture) }}
+        {{ form_errors(form.profilePicture) }}
+    </div>
+
+    {# BOUTON ENREGISTRER #}
+    <div>
+        <button type="submit" class="btn btn-update">
+            Enregistrer les modifications
+        </button>
+    </div>
+
+    {# Génère automatiquement le token CSRF et ferme la balise </form> #}
+    {{ form_end(form) }}
+
+    <hr>
+
+    {# 3. FORMULAIRE DE SUPPRESSION (Totalement séparé) #}
+    <form method="post" action="{{ path('user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce profil ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+        <button type="submit" class="btn btn-danger">Supprimer mon compte</button>
+    </form>
+</div>
