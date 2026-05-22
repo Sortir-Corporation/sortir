@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Afficher une sortie{% endblock %}
+
+{% block body %}
+    <div>
+
+        <h1>Afficher une sortie</h1>
+
+        <div>
+
+            <div>
+                <strong>Nom de la sortie :</strong>
+                <span>{{ event.name }}</span>
+            </div>
+
+            <div>
+                <strong>Date et heure de la sortie :</strong>
+                <span>{{ event.startTime|date('d/m/Y H:i') }}</span>
+            </div>
+
+            <div>
+                <strong>Date limite d'inscription :</strong>
+                <span>{{ event.registrationDeadline|date('d/m/Y H:i') }}</span>
+            </div>
+
+            <div>
+                <strong>Nombre de places :</strong>
+                <span>{{ event.maxParticipants }}</span>
+            </div>
+
+            <div>
+                <strong>Durée :</strong>
+                <span>{{ event.duration }} minutes</span>
+            </div>
+
+            <div>
+                <strong>Description et infos :</strong>
+                <p>{{ event.eventInfo }}</p>
+            </div>
+
+            <div>
+                <strong>Ville organisatrice :</strong>
+                <span>{{ event.campus.name }}</span>
+            </div>
+
+            <div>
+                <strong>Lieu :</strong>
+                <span>{{ event.location.name }}</span>
+            </div>
+
+            <div>
+                <strong>Rue :</strong>
+                <span>{{ event.location.street }}</span>
+            </div>
+
+            <div>
+                <strong>Code postal :</strong>
+                <span>{{ event.location.city.zipCode }}</span>
+            </div>
+
+            <div>
+                <strong>Latitude :</strong>
+                <span>{{ event.location.latitude }}</span>
+            </div>
+
+            <div>
+                <strong>Longitude :</strong>
+                <span>{{ event.location.longitude }}</span>
+            </div>
+
+        </div>
+
+        <h3>Liste des participants inscrits :</h3>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Nom</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in event.users %}
+                <tr>
+                    <td>{{ user.alias }}</td>
+                    <td>{{ user.firstname }} {{ user.lastname }}</td>
+                    <td>
+                        <a href="{{ path('events_unRegister', {id: event.id}) }}">Se désinscrire</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>Aucun participant inscrit pour le moment.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div>
+            <a href="{{ path('app_home') }}">Retour</a>
+
+            {% if app.user and not event.users.contains(app.user) %}
+                <a href="{{ path('events_register', {id: event.id}) }}">S'inscrire</a>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}

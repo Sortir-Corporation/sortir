@@ -290,4 +290,25 @@ class Event
 
         return $this;
     }
+
+    public function isPublished(): bool
+    {
+        return $this->getStatus() === EventStatus::OPEN;
+    }
+
+    public function isRegistrationOpen(): bool
+    {
+        return (new \DateTime()) <= $this->registrationDeadline;
+    }
+
+    public function hasFreeSlots(): bool
+    {
+        return $this->users->count() < $this->maxParticipants;
+    }
+
+    public function isUserRegistered(User $user): bool
+    {
+        return $this->users->contains($user);
+    }
+
 }
