@@ -1,0 +1,13 @@
+body {
+    /* Your exact colors, tweaked slightly for a smoother blend */
+    background: linear-gradient(135deg, #12497E 0%, #306C85 50%, #4F919E 100%);
+
+    /* Locks the gradient to the screen so it doesn't stretch when you scroll */
+    background-attachment: fixed;
+
+    min-height: 100vh;
+    margin: 0;
+
+    font-family: var(--font-body);
+    color: #ffffff; /* Default text color for the page */
+}

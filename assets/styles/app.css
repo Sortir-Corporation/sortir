@@ -1,1 +1,18 @@
+/* 1. RESET & BASE SETUP (Generic global styles) */
+@import "base/reset.css";       /* Always first! Clears browser defaults */
+@import "base/variables.css";   /* Defines custom properties/tokens */
+@import "base/typography.css";  /* Sets up base HTML tags like body, h1, p */
+@import "base/elements.css";
 
+/* 2. LAYOUT (The structural skeleton of the site) */
+@import "layout/grid.css";      /* Main macro-layout structural system */
+@import "layout/header.css";    /* Big layout wrapper for global header */
+@import "layout/footer.css";    /* Big layout wrapper for global footer */
+
+/* 3. COMPONENTS (Discrete, reusable UI pieces) */
+@import "components/buttons.css";
+@import "components/cards.css";
+@import "components/forms.css";
+
+/* 4. UTILITIES (Impersonator classes that must always win) */
+@import "base/utilities.css";   /* Always last! Ensures helper classes work */

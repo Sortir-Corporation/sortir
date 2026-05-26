@@ -1,0 +1,126 @@
+/* layout/header.css */
+
+/* 1. Center the header on the page */
+header {
+    display: flex;
+    justify-content: center; /* Centers the crystal container horizontally */
+    width: 100%;
+    top: 1.5rem; /* Pushes it down from the very top of the screen */
+
+    /* THE STICKY MAGIC */
+    position: sticky;
+    z-index: 100; /* Ensures it stays on top of all other page content */
+}
+
+/* 2. The Crystal Container */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+}
+
+/* 3. Typography and Links */
+.logo-title {
+    margin: 0;
+    font-family: var(--font-logo); /* Using the variable you just set up! */
+    font-size: 2.2rem;
+    color: #ffffff;
+    /* Prevents highlighting */
+    user-select: none;
+    -webkit-user-select: none; /* For Safari */
+
+    /* Makes the mouse act like it is hovering over a button/image */
+    cursor: pointer;
+}
+
+.navbar .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+/* 1. Base State */
+.nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+
+    color: rgba(255, 255, 255, 0.85); /* Slightly muted so the hover "pops" */
+    letter-spacing: 0.03em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    padding: 0.75rem 1.75rem;
+    border-radius: 50px;
+
+    border: 1px solid rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0);
+
+    box-shadow: inset 0 0 0 rgba(255, 255, 255, 0),
+    0 0 0 rgba(0, 0, 0, 0);
+
+    transform: scale(1);
+    transition: background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.15s ease-out;
+}
+
+/* 2. Hover State */
+.nav-links a:hover {
+    /* Very subtle, highly transparent fill */
+    background-color: rgba(255, 255, 255, 0.1);
+
+    /* Crisp, bright white text */
+    color: #ffffff;
+
+    /* A uniform, faint border to define the shape */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    /* THE FIX: 0px blur on the inset shadow creates a razor-sharp,
+       clean light reflection on the top inner edge */
+    box-shadow: inset 0 1px 0px rgba(255, 255, 255, 0.4),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.nav-links a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 1px 0px rgba(255, 255, 255, 0.4),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/*!* The Softened Dark Glass Active State *!*/
+/*.nav-links a.active {*/
+/*    !* Much softer, almost smoky dark tint rather than a solid pool *!*/
+/*    background-color: rgba(0, 0, 0, 0.08);*/
+/*    color: #ffffff;*/
+
+/*    !* THE FIX: No more dark lines. Invisible border prevents layout shifts. *!*/
+/*    border: 1px solid transparent;*/
+
+/*    !* THE GLARE & BLUR PHYSICS:*/
+/*       1. Wider, softer dark inner blur for a smooth indentation (no blocky edges).*/
+/*       2. A faint white glare on the top inner edge to catch the light.*/
+/*       3. The bottom lip reflection, slightly softened so it doesn't look like a wire. *!*/
+/*    box-shadow:*/
+/*        inset 0 4px 12px rgba(0, 0, 0, 0.12),*/
+/*        inset 0 1px 2px rgba(255, 255, 255, 0.08),*/
+/*        inset 0 -1px 1px rgba(255, 255, 255, 0.2);*/
+/*}*/
+
+/*.nav-links a.active:hover {*/
+/*    background-color: rgba(0, 0, 0, 0.04);*/
+/*    box-shadow:*/
+/*        inset 0 3px 8px rgba(0, 0, 0, 0.08),*/
+/*        inset 0 1px 2px rgba(255, 255, 255, 0.1),*/
+/*        inset 0 -1px 1px rgba(255, 255, 255, 0.25);*/
+/*}*/

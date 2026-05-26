@@ -1,0 +1,240 @@
+/* 1. Global Input Targeting */
+/* Targets all standard text-based inputs, textareas, and dropdowns */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+textarea,
+select,
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: #ffffff;
+
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+    transition: all 0.3s ease;
+
+    /* Prevents iOS from adding its own rounded styling */
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Ensure textareas scale nicely */
+textarea, .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* 2. Global Placeholder Styling */
+/* The opacity: 1 is required because Firefox lowers placeholder opacity by default */
+::-webkit-input-placeholder { color: rgba(255, 255, 255, 0.5); }
+::-moz-placeholder { color: rgba(255, 255, 255, 0.5); opacity: 1; }
+:-ms-input-placeholder { color: rgba(255, 255, 255, 0.5); }
+::-ms-input-placeholder { color: rgba(255, 255, 255, 0.5); }
+::placeholder { color: rgba(255, 255, 255, 0.5); opacity: 1; }
+
+
+/* 3. Global Focus State */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="datetime-local"]:focus,
+textarea:focus,
+select:focus,
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown options (must remain solid for legibility) */
+select option {
+    background-color: #12497E;
+    color: #ffffff;
+}
+
+/* 4. Checkboxes and Radio Buttons */
+/* Strips the ugly default browser boxes and replaces them with glass */
+input[type="checkbox"],
+input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+input[type="radio"] {
+    border-radius: 50%; /* Radios are circles */
+}
+
+/* Checked States */
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 1);
+}
+
+/* The checkmark/dot inside */
+input[type="checkbox"]:checked::after {
+    content: '✔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #12497E;
+    font-size: 0.8rem;
+}
+
+input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #12497E;
+}
+
+/* 5. File Upload Button */
+input[type="file"] {
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+/* Styles the actual "Choose File" button inside the input */
+input[type="file"]::file-selector-button {
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+
+
+
+
+/* The main wrapper (Use alongside .glass-panel in HTML) */
+.form-container {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 3rem;
+    border-radius: 24px;
+}
+
+.form-container h1 {
+    font-family: var(--font-logo, sans-serif);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    font-weight: normal;
+}
+
+/* Sections and Titles */
+.form-section {
+    border: none;
+    margin: 0 0 2.5rem 0;
+    padding: 0;
+}
+
+.form-section legend {
+    width: 100%;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Individual field wrappers */
+.form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.02em;
+}
+
+/* Side-by-side grid for desktop */
+.form-group-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* Form Errors */
+.form-error {
+    color: #ff6b6b; /* A soft pastel red that reads well on dark backgrounds */
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .form-group-row {
+        grid-template-columns: 1fr; /* Stacks side-by-side fields on mobile */
+        gap: 0;
+    }
+
+    .form-container {
+        padding: 2rem 1.5rem;
+        margin: 2rem 1rem;
+    }
+}
