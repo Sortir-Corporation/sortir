@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\User;
+use App\Enum\EventStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,65 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    //    /**
-    //     * @return Event[] Returns an array of Event objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Event[]
+     */
+    public function findForHome(
+        User $user,
+        ?int $campusId,
+        string $search,
+        ?\DateTime $dateStart,
+        ?\DateTime $dateEnd,
+        bool $isOrganizer,
+        bool $isRegistered,
+        bool $showPast,
+    ): array {
+        $qb = $this->createQueryBuilder('e')
+            ->join('e.campus', 'c')
+            ->join('e.organizer', 'o')
+            ->join('e.location', 'l')
+            ->addSelect('c', 'o', 'l')
+            ->orderBy('e.startTime', 'ASC');
 
-    //    public function findOneBySomeField($value): ?Event
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        // Sorties annulées visibles uniquement par l'organisateur
+        $qb->andWhere('e.status != :cancelled OR e.organizer = :user')
+            ->setParameter('cancelled', EventStatus::CANCELED)
+            ->setParameter('user', $user);
+
+        if (!$showPast) {
+            $qb->andWhere('e.startTime >= :today')
+                ->setParameter('today', new \DateTime('today'));
+        }
+
+        if ($campusId) {
+            $qb->andWhere('c.id = :campusId')
+                ->setParameter('campusId', $campusId);
+        }
+
+        if ($search !== '') {
+            $qb->andWhere('e.name LIKE :search')
+                ->setParameter('search', '%'.$search.'%');
+        }
+
+        if ($dateStart) {
+            $qb->andWhere('e.startTime >= :dateStart')
+                ->setParameter('dateStart', $dateStart);
+        }
+
+        if ($dateEnd) {
+            $qb->andWhere('e.startTime <= :dateEnd')
+                ->setParameter('dateEnd', $dateEnd);
+        }
+
+        if ($isOrganizer) {
+            $qb->andWhere('e.organizer = :user');
+        }
+
+        if ($isRegistered) {
+            $qb->join('e.users', 'u')
+                ->andWhere('u = :user');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
