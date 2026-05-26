@@ -24,11 +24,24 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_login') }}"
-                       class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">
-                        Se connecter
-                    </a>
+                    {% if app.user %}
+                        <span>Bonjour, {{ app.user.alias }}</span>
+
+                        <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm">
+                            Déconnexion
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="btn btn-primary btn-sm">
+                            Connexion
+                        </a>
+                    {% endif %}
                 </li>
+{#                <li>#}
+{#                    <a href="{{ path('app_login') }}"#}
+{#                       class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">#}
+{#                        Se connecter#}
+{#                    </a>#}
+{#                </li>#}
             </ul>
         </nav>
     </div>
