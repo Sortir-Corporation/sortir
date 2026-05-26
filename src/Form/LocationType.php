@@ -31,6 +31,9 @@ class LocationType extends AbstractType
             ->add('city', EntityType::class, [
                 'class' => City::class,
                 'choice_label' => 'name',
+                'label' => 'Ville',
+                'placeholder' => 'Sélectionner une ville...',
+                'attr' => ['class' => 'form-control'],
             ])
         ;
     }

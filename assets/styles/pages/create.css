@@ -1,0 +1,6 @@
+.link {
+    text-decoration: underline dotted white;
+    text-underline-offset: 3px;
+    margin-bottom: 1rem;
+}
+

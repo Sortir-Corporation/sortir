@@ -85,7 +85,11 @@
 
                 <div class="form-group">
                     {{ form_label(eventForm.location, 'Location') }}
+                    <a href="{{ path('location_create') }}" class="link">
+                        Ajouter un nouveau lieu
+                    </a>
                     {{ form_widget(eventForm.location) }}
+
                     <div class="form-error">
                         {{ form_errors(eventForm.location) }}
                     </div>

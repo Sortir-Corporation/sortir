@@ -249,7 +249,7 @@ class Event
         $now = new \DateTime();
 
         // 1. Si l'événement est annulé, il reste annulé.
-        if ($this->status === EventStatus::CANCELED) {
+        if (EventStatus::CANCELED === $this->status) {
             return $this->status;
         }
 
