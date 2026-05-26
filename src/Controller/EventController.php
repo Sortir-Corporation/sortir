@@ -39,7 +39,7 @@ final class EventController extends AbstractController
                 $entityManager->flush();
                 $this->addFlash('success', 'Event created');
 
-                return $this->redirectToRoute('events');
+                return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
             } catch (\Exception $e) {
                 $this->addFlash('error', 'An error occurred: '.$e->getMessage());
             }
@@ -123,11 +123,75 @@ final class EventController extends AbstractController
             $event->removeUser($user);
             $em->flush(); // Sauvegarde en BDD
 
-            $this->addFlash('success', 'You have been successfully unregistered from this event.');
+            $this->addFlash('success', 'Vous avez été désinscrit de cet événement.');
         } else {
-            $this->addFlash('warning', 'You were not registered for this event.');
+            $this->addFlash('warning', 'Vous n\'êtes pas inscrit à cet événement !');
         }
 
         return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
     }
+
+    #[Route('/{id}/cancel', name: 'cancel', methods: ['GET'])]
+    public function cancel(Request $request,Event $event, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        // 1. Sécurité : Seul l'organisateur peut annuler
+        if ($event->getOrganizer()->getId() !== $user->getId()) {
+            $this->addFlash('error', 'Vous n\'êtes pas l\'organisateur de cette sortie.');
+            return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
+        }
+
+        // 2. Règle métier : Interdit d'annuler si "En cours" ou "Passé"
+        $currentStatus = $event->getStatus();
+        if ($currentStatus === EventStatus::IN_PROGRESS || $currentStatus === EventStatus::PAST) {
+            $this->addFlash('error', 'Impossible d\'annuler un événement en cours ou terminé.');
+            return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
+        }
+
+        // 3. Validation du jeton CSRF (Sécurité POST)
+        if (!$this->isCsrfTokenValid('cancel'.$event->getId(), $request->getPayload()->getString('_token'))) {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
+            return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
+        }
+
+        // On change simplement le statut, on ne fait PAS de remove
+        $event->setStatus(EventStatus::CANCELED);
+        $em->flush(); // Pas besoin de persist() sur une entité déjà connue de Doctrine
+
+        $this->addFlash('success', 'L\'événement a été annulé avec succès.');
+        return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
+    }
+
+    #[Route('/{id}/publish', name: 'publish', methods: ['POST'])]
+    public function publish(Request $request,Event $event, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Remplacer : if ($event->getOrganizer() !== $user)
+        // Par une comparaison d'ID :
+        if ($event->getOrganizer()->getId() !== $user->getId()) {
+            $this->addFlash('error', 'Vous n\'êtes pas l\'organisateur de cette sortie.');
+            return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
+        }
+
+        // Le statut est mis à jour (votre getStatus() corrigé s'occupe du reste)
+        $event->setStatus(EventStatus::OPEN);
+
+
+        $em->persist($event);
+        $em->flush();
+
+        $this->addFlash('success', 'Votre sortie a bien été publiée et est ouverte aux inscriptions !');
+        return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
+    }
+
 }

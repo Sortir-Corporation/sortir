@@ -15,6 +15,11 @@
             </div>
 
             <div>
+                <strong>Statut de la sortie :</strong>
+                <span>{{ event.status.value }}</span>
+            </div>
+
+            <div>
                 <strong>Date et heure de la sortie :</strong>
                 <span>{{ event.startTime|date('d/m/Y H:i') }}</span>
             </div>
@@ -104,6 +109,44 @@
             {% if app.user and not event.users.contains(app.user) %}
                 <a href="{{ path('events_register', {id: event.id}) }}">S'inscrire</a>
             {% endif %}
+        </div>
+
+        <div>
+            {% if event.status.name == 'CREATED' %}
+                {# on reconstruit le formulaire en intégrant le token CSRF et en désactivant explicitement Turbo (via data-turbo="false") pour être certain que Symfony reçoive la requête HTTP standard complète. #}
+                <form action="{{ path('events_publish', {'id': event.id}) }}" method="POST" data-turbo="false">
+                    <input type="hidden" name="_token" value="{{ csrf_token('publish' ~ event.id) }}">
+
+                    <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Voulez-vous vraiment publier cette sortie ? Les inscriptions seront ouvertes.');">
+                        Publier la sortie
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div>
+            {# L'utilisateur doit être l'organisateur ET l'événement ne doit être ni en cours, ni passé #}
+            {% if app.user and event.organizer.id == app.user.id %}
+                {% if event.status.name != 'IN_PROGRESS' and event.status.name != 'PAST' %}
+
+                    <form action="{{ path('events_cancel', {'id': event.id}) }}" method="POST" data-turbo="false">
+                        <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ event.id) }}">
+
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Êtes-vous absolument sûr de vouloir annuler définitivement cet événement ? Cette action est irréversible.');">
+                            Annuler l'événement
+                        </button>
+                    </form>
+
+                {% endif %}
+            {% endif %}
+        </div>
+
+
+
+        <div>
+
+
         </div>
 
     </div>

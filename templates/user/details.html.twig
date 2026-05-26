@@ -44,5 +44,129 @@
             Modifier / Supprimer mon compte
         </a>
     </div>
+<hr>
+    <h2>Mes sorties / évênements :</h2>
+
+    <div class="filter-buttons mb-4">
+        <button class="btn btn-primary filter-btn active" data-filter="all">
+            Tous ({{ user.partakenEvents|length + user.createdEvents|length }})
+        </button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="attending">
+            Événements auxquels je participe : ({{ user.partakenEvents|length }})
+        </button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="organizing">
+            Événements que j'organise : ({{ user.createdEvents|length }})
+        </button>
+    </div>
+
+    <div>
+
+        {# 1. Événements organisés (createdEvents) #}
+        {% for event in user.createdEvents %}
+            <div class="event-item card mb-3 p-3" data-type="organizing">
+                    <div>
+                        <span class="badge bg-success me-2">Organisateur</span>
+                        <strong>{{ event.name }}</strong>
+                        <span class="text-muted">— Le {{ event.startTime|date('d/m/Y à H:i') }}</span>
+
+                        {# Optionnel : Petit texte indicateur pour l'organisateur #}
+                        {% if event.status.name == 'CREATED' %}
+                            <span class="text-warning ms-2" style="font-size: 0.9em;">(Brouillon - Non publié)</span>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <a href="{{ path('events_details', {'id': event.id}) }}" class="btn btn-sm btn-outline-secondary">Voir le détail</a>
+
+                        {# NOUVEAU bouton Publier : visible uniquement si le statut est CREATED #}
+                        {% if event.status.name == 'CREATED' %}
+                            <form action="{{ path('events_publish', {'id': event.id}) }}" method="GET">
+                                <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Voulez-vous vraiment publier cette sortie ? Les inscriptions seront ouvertes.');">
+                                    Publier la sortie
+                                </button>
+                            </form>
+                        {% endif %}
+
+                        {# Bouton Annuler : visible uniquement si l'événement n'est pas déjà annulé ou passé #}
+                        {% if event.status.name != 'CANCELED' and event.status.name != 'PAST' %}
+                            <a href="{{ path('events_cancel', {'id': event.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');">
+                                Annuler la sortie
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+        {% endfor %}
+        {# 2. Événements rejoints (partakenEvents) #}
+        {% for event in user.partakenEvents %}
+            <div class="event-item card mb-2 p-3" data-type="attending">
+                    <div>
+                        <span class="badge bg-info">Participant</span>
+                        <strong>{{ event.name }}</strong>
+                        <span>— Le {{ event.startTime|date('d/m/Y à H:i') }}</span>
+                    </div>
+                    <div>
+{#                    <span class="badge bg-secondary">#}
+{#                        {{ event.status.value|default(event.status.name)|default('N/A') }}#}
+{#                    </span>#}
+                        <a href="{{ path('events_details', {'id': event.id}) }}" class="btn btn-sm btn-link">Voir le détail</a>
+                    {# Lien de désinscription : utilise votre méthode unregister() de l'EventController #}
+                    {% if event.status.name == 'OPEN' %}
+                        <a href="{{ path('events_unRegister', {'id': event.id}) }}" class="btn btn-sm btn-warning" onclick="return confirm('Se désinscrire de cette sortie ?');">
+                            Se désinscrire
+                        </a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {# Message de secours si aucune activité #}
+        {% if user.createdEvents is empty and user.partakenEvents is empty %}
+            <div class="alert alert-info">
+                Aucune sortie planifiée ou rejointe pour le moment.
+            </div>
+        {% endif %}
+    </div>
+
+    {# ================= JAVASCRIPT DE FILTRAGE ROBUSTE ================= #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. On récupère tous les boutons de filtre et tous les éléments d'événements
+            const buttons = document.querySelectorAll('.filter-btn');
+            const items = document.querySelectorAll('.event-item');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 2. Gestion visuelle des boutons (change la couleur du bouton actif)
+                    buttons.forEach(btn => {
+                        btn.classList.remove('btn-primary', 'active');
+                        btn.classList.add('btn-outline-primary');
+                    });
+                    this.classList.remove('btn-outline-primary');
+                    this.classList.add('btn-primary', 'active');
+
+                    // 3. Récupération du filtre choisi (all, attending ou organizing)
+                    const filterValue = this.getAttribute('data-filter');
+
+                    // 4. On parcourt chaque événement pour le masquer ou l'afficher
+                    items.forEach(item => {
+                        if (filterValue === 'all') {
+                            // Si on clique sur "Tous", on affiche tout
+                            item.style.setProperty('display', 'block', 'important');
+                        } else {
+                            // Sinon, on compare le type de l'événement avec le filtre demandé
+                            if (item.getAttribute('data-type') === filterValue) {
+                                item.style.setProperty('display', 'block', 'important');
+                            } else {
+                                item.style.setProperty('display', 'none', 'important');
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+
+
 
 {% endblock %}
