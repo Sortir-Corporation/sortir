@@ -29,6 +29,7 @@ class EventType extends AbstractType
 //            ])
             ->add('location', EntityType::class, [
                 'class' => Location::class,
+                'placeholder' => 'Choisir un lieu...',
                 'choice_label' => 'name',
             ])
 

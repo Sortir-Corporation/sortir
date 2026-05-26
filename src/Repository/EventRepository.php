@@ -53,7 +53,7 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter('campusId', $campusId);
         }
 
-        if ($search !== '') {
+        if ('' !== $search) {
             $qb->andWhere('e.name LIKE :search')
                 ->setParameter('search', '%'.$search.'%');
         }

@@ -14,12 +14,13 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-
         </div>
 
         {{ form_start(eventForm) }}
 
+        {# SECTION 1: General Information #}
         <fieldset class="form-section">
+            <legend>General Details</legend>
 
             <div class="form-group">
                 {{ form_label(eventForm.name, 'Nom de l\'évènement :') }}
@@ -40,7 +41,9 @@
             </div>
         </fieldset>
 
+        {# SECTION 2: Schedule & Timing #}
         <fieldset class="form-section">
+            <legend>Schedule</legend>
 
             <div class="form-group-row">
                 <div class="form-group">
@@ -71,7 +74,9 @@
             </div>
         </fieldset>
 
+        {# SECTION 3: Logistics #}
         <fieldset class="form-section">
+            <legend>Logistics & Capacity</legend>
 
             <div class="form-group-row">
                 <div class="form-group">
@@ -85,7 +90,10 @@
                 </div>
 
                 <div class="form-group">
-                    {{ form_label(eventForm.location, 'Lieu :') }}
+                    {{ form_label(eventForm.location, 'Location') }}
+                    <a href="{{ path('location_create') }}" class="link">
+                        Ajouter un nouveau lieu
+                    </a>
                     {{ form_widget(eventForm.location) }}
                     <div class="form-error">
                         {{ form_errors(eventForm.location) }}
@@ -98,6 +106,7 @@
             </div>
         </fieldset>
 
+        {# Submit Button #}
         <div class="form-actions">
             <button type="submit" class="btn-primary">Créer</button>
         </div>
