@@ -7,8 +7,10 @@ use App\Entity\Event;
 use App\Entity\Location;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class EventType extends AbstractType
 {
@@ -29,7 +31,22 @@ class EventType extends AbstractType
                 'class' => Location::class,
                 'choice_label' => 'name',
             ])
-        ;
+
+            ->add('eventPicture', FileType::class, [
+                'label' => 'Event Picture',
+                'mapped' => false, // 👈 TRÈS IMPORTANT : dit à Symfony de ne pas chercher la string en BDD directement pour ce champ
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'image PNG ou JPEG valide inférieure à 1024K',
+                    ]),
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -38,4 +55,5 @@ class EventType extends AbstractType
             'data_class' => Event::class,
         ]);
     }
+
 }
