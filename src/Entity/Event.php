@@ -248,17 +248,17 @@ class Event
     {
         $now = new \DateTime();
 
-        // If the status has been set to a manual status it returns it
-        if (in_array($this->status, [EventStatus::CANCELED, EventStatus::CLOSED])) {
+        // 1. Si l'événement est annulé, il reste annulé.
+        if ($this->status === EventStatus::CANCELED) {
             return $this->status;
         }
 
-        // If we lack time data, return the default status
+        // Si on manque de données temporelles, on renvoie le statut brut (ex: CREATED)
         if (!$this->startTime || !$this->endTime || !$this->registrationDeadline) {
             return $this->status;
         }
 
-        // Dynamic calculation of other statuses
+        // 2. Calculs dynamiques prioritaires (le temps passe pour tout le monde)
         if ($now > $this->endTime) {
             return EventStatus::PAST;
         }
@@ -267,19 +267,19 @@ class Event
             return EventStatus::IN_PROGRESS;
         }
 
-        // If the event is published we calculate the registration closure
-        if (EventStatus::OPEN === $this->status) {
+        // 3. Si l'événement est publié (OPEN) ou CLOS en BDD, on gère les places et la deadline
+        if (in_array($this->status, [EventStatus::OPEN, EventStatus::CLOSED])) {
             $isPastDeadline = $now > $this->registrationDeadline;
-
-            // We check the number of participants
             $isFull = $this->users->count() >= $this->maxParticipants;
 
             if ($isPastDeadline || $isFull) {
                 return EventStatus::CLOSED;
             }
+
+            return EventStatus::OPEN;
         }
 
-        // Returns the database status
+        // 4. Par défaut, retourne le statut brut de la BDD (ex: CREATED)
         return $this->status;
     }
 
