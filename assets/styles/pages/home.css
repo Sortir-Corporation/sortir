@@ -1,0 +1,149 @@
+/* Base Crystal Card Styles */
+.event-card {
+    background: rgba(255, 255, 255, 0.08); /* Minimal white opacity */
+    backdrop-filter: blur(12px);          /* The frosting effect */
+    -webkit-backdrop-filter: blur(12px);  /* Safari support */
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Soft glass edge reflection */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+/* Base Badge Style (Small piece of cut glass) */
+.status-badge {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Simple status marker dots inside the crystal badge */
+.status-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+/* Status Variations — Modifying just the tiny dot and card edge glow */
+.status-open .status-badge::before { background-color: #2ecc71; } /* Green */
+.status-open { border-color: rgba(46, 204, 113, 0.25); }
+
+.status-closed .status-badge::before { background-color: #f1c40f; } /* Yellow/Orange */
+.status-closed { border-color: rgba(241, 196, 15, 0.25); }
+
+.status-canceled .status-badge::before { background-color: #e74c3c; } /* Red */
+.status-canceled { border-color: rgba(231, 76, 60, 0.25); }
+
+.status-past .status-badge::before { background-color: #95a5a6; } /* Muted Grey */
+
+
+/* Container holding all the filter elements */
+.filter-main-fields {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5rem;
+    align-items: end; /* Aligns inputs nicely at the bottom, even if labels are different heights */
+}
+
+/* Row 1: Search and Campus */
+.filter-search {
+    grid-column: span 4;
+}
+
+.filter-campus {
+    grid-column: span 2;
+}
+
+/* Row 2: Dates and Submit Button */
+.filter-date-start {
+    grid-column: span 2;
+}
+
+.filter-date-end {
+    grid-column: span 2;
+}
+
+.filter-actions {
+    grid-column: span 6;
+}
+
+.filter-submit-btn {
+    width: 100%;
+    padding: 1rem 1rem;
+    /* Add your custom colors and borders here */
+    background-color: #12497E;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+/* Row 3: Checkboxes */
+.filter-secondary-fields {
+    grid-column: span 6; /* Spans the entire width of the grid */
+    display: flex;       /* Switches to flexbox for the inner items */
+    gap: 1.5rem;
+    flex-wrap: wrap;     /* Allows checkboxes to stack nicely if the screen gets smaller */
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6; /* Optional: A subtle line to separate checkboxes */
+}
+
+/* Basic styling for the form elements so they don't look broken */
+.filter-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.filter-checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-checkbox-input {
+    margin: 0;
+}
+
+.event-filter-form {
+    margin-bottom: 3rem;
+}
+
+.cta-link::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.events-grid {
+    display: grid;
+    /* Creates responsive columns: at least 300px wide, expanding to fill available space */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    align-items: start; /* Prevents cards from stretching vertically to match the tallest card in the row */
+}
+
+.margin-top-container {
+    margin-top: 2rem;
+}

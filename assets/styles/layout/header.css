@@ -10,6 +10,8 @@ header {
     /* THE STICKY MAGIC */
     position: sticky;
     z-index: 100; /* Ensures it stays on top of all other page content */
+
+    margin-bottom: 4rem;
 }
 
 /* 2. The Crystal Container */

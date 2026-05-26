@@ -3,18 +3,23 @@
 {% block title %}Sortir.com — Accueil{% endblock %}
 
 {% block body %}
-    <div class="container my-4">
-
+    <main>
         {# ── Filtres ── #}
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title mb-3">Filtrer les sorties</h5>
-                <form method="get" action="{{ path('app_home') }}">
-                    <div class="row g-3">
 
-                        <div class="col-md-3">
-                            <label for="campus" class="form-label">Campus</label>
-                            <select name="campus" id="campus" class="form-select">
+                <form class="event-filter-form" method="get" action="{{ path('app_home') }}">
+
+                    <div class="filter-main-fields">
+
+                        <div class="filter-field filter-search">
+                            <label for="search" class="filter-label">Rechercher une sortie...</label>
+                            <input type="text" name="search" id="search" class="filter-input"
+                                   placeholder="Nom de la sortie..."
+                                   value="{{ app.request.query.get('search') }}">
+                        </div>
+
+                        <div class="filter-field filter-campus">
+                            <label for="campus" class="filter-label">Campus</label>
+                            <select name="campus" id="campus" class="filter-select">
                                 <option value="">Tous les campus</option>
                                 {% for campus in campuses %}
                                     <option value="{{ campus.id }}"
@@ -25,119 +30,105 @@
                             </select>
                         </div>
 
-                        <div class="col-md-3">
-                            <label for="search" class="form-label">Rechercher</label>
-                            <input type="text" name="search" id="search" class="form-control"
-                                   placeholder="Nom de la sortie..."
-                                   value="{{ app.request.query.get('search') }}">
-                        </div>
-
-                        <div class="col-md-2">
-                            <label for="date_start" class="form-label">Entre le</label>
-                            <input type="date" name="date_start" id="date_start" class="form-control"
+                        <div class="filter-field filter-date-start">
+                            <label for="date_start" class="filter-label">Entre le</label>
+                            <input type="date" name="date_start" id="date_start" class="filter-input"
                                    value="{{ app.request.query.get('date_start') }}">
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="date_end" class="form-label">Et le</label>
-                            <input type="date" name="date_end" id="date_end" class="form-control"
+                        <div class="filter-field filter-date-end">
+                            <label for="date_end" class="filter-label">Et le</label>
+                            <input type="date" name="date_end" id="date_end" class="filter-input"
                                    value="{{ app.request.query.get('date_end') }}">
                         </div>
 
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary w-100">Rechercher</button>
-                        </div>
+                        <div class="filter-secondary-fields">
 
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-auto">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="is_organizer"
+                            <div class="filter-checkbox-group">
+                                <input class="filter-checkbox-input" type="checkbox" name="is_organizer"
                                        id="is_organizer" value="1"
                                     {{ app.request.query.get('is_organizer') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="is_organizer">
+                                <label class="filter-checkbox-label" for="is_organizer">
                                     Sorties dont je suis l'organisateur
                                 </label>
                             </div>
-                        </div>
-                        <div class="col-auto">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="is_registered"
+
+                            <div class="filter-checkbox-group">
+                                <input class="filter-checkbox-input" type="checkbox" name="is_registered"
                                        id="is_registered" value="1"
                                     {{ app.request.query.get('is_registered') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="is_registered">
+                                <label class="filter-checkbox-label" for="is_registered">
                                     Sorties auxquelles je suis inscrit
                                 </label>
                             </div>
-                        </div>
-                        <div class="col-auto">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="show_past"
+
+                            <div class="filter-checkbox-group">
+                                <input class="filter-checkbox-input" type="checkbox" name="show_past"
                                        id="show_past" value="1"
                                     {{ app.request.query.get('show_past') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="show_past">
+                                <label class="filter-checkbox-label" for="show_past">
                                     Sorties passées
                                 </label>
                             </div>
-                        </div>
-                    </div>
 
+                        </div>
+
+                        <div class="filter-actions">
+                            <button type="submit" class="filter-submit-btn">Rechercher</button>
+                        </div>
+
+                    </div>
                 </form>
-            </div>
-        </div>
+
 
         {# ── Liste des sorties ── #}
-        <h4 class="mb-3">Sorties à venir</h4>
 
         {% if events is empty %}
             <div class="alert alert-info">Aucune sortie ne correspond à vos critères.</div>
         {% else %}
-            {% for event in events %}
-                {% set badgeClass = 'bg-light text-dark' %}
-                {% if event.status.value == 'Ouverte' %}
-                    {% set badgeClass = 'bg-success' %}
-                {% elseif event.status.value == 'Clôturée' %}
-                    {% set badgeClass = 'bg-warning text-dark' %}
-                {% elseif event.status.value == 'Annulée' %}
-                    {% set badgeClass = 'bg-danger' %}
-                {% elseif event.status.value == 'passée' %}
-                    {% set badgeClass = 'bg-secondary' %}
-                {% elseif event.status.value == 'Activité en cours' %}
-                    {% set badgeClass = 'bg-info text-dark' %}
-                {% endif %}
+            <div class="events-grid">
+                {% for event in events %}
 
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <h5 class="card-title mb-1">{{ event.name }}</h5>
-                            <span class="badge {{ badgeClass }}">{{ event.status.value }}</span>
+                    <div class="event-card status-{{ event.status.name|lower }}">
+
+                        {# Header: Title + Status #}
+                        <div class="card-header">
+                            <span class="status-badge">{{ event.status.value }}</span>
+                            <h3>{{ event.name }}</h3>
                         </div>
-                        <p class="card-text mb-1">
-                            <strong>Date :</strong> {{ event.startTime|date('d/m/Y à H:i') }}
-                            &nbsp;|&nbsp;
-                            <strong>Durée :</strong> {{ event.duration }} min
-                        </p>
-                        <p class="card-text mb-1">
-                            <strong>Lieu :</strong> {{ event.location.name }}, {{ event.location.city.name }}
-                            &nbsp;|&nbsp;
-                            <strong>Campus :</strong> {{ event.campus.name }}
-                        </p>
-                        <p class="card-text mb-1">
-                            <strong>Inscrits :</strong> {{ event.users|length }} / {{ event.maxParticipants }}
-                            &nbsp;|&nbsp;
-                            <strong>Organisateur :</strong> {{ event.organizer.firstName }} {{ event.organizer.lastName }}
-                            &nbsp;|&nbsp;
-                            <strong>Clôture :</strong> {{ event.registrationDeadline|date('d/m/Y') }}
-                        </p>
+
+                        {# Body: Only the vital logistics #}
+                        <div class="card-body">
+                            <div class="meta-item">
+                                <span class="icon">📅</span>
+                                <time>{{ event.startTime|date('d/m/Y à H:i') }}</time>
+                            </div>
+
+                            <div class="meta-item">
+                                <span class="icon">📍</span>
+                                <span>{{ event.location.city.name }}</span>
+                            </div>
+                        </div>
+
+                        {# Footer: Gauge + Call to Action #}
+                        <div class="card-footer">
+                            <div class="attendees-count">
+                                👤 {{ event.users|length }} / {{ event.maxParticipants }} places
+                            </div>
+
+                            <a href="{{ path('events_details', {'id': event.id}) }}" class="cta-link">
+                                Voir la sortie →
+                            </a>
+                        </div>
+
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         {% endif %}
 
-        <div class="mt-4">
+        <div class="margin-top-container">
             <a href="{{ path('events_create') }}" class="btn btn-success">+ Créer une sortie</a>
         </div>
 
-    </div>
+    </main>
 {% endblock %}
