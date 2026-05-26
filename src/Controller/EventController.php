@@ -7,10 +7,12 @@ use App\Enum\EventStatus;
 use App\Form\EventType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/events', name: 'events_')]
 final class EventController extends AbstractController
@@ -20,6 +22,7 @@ final class EventController extends AbstractController
     public function create(
         Request $request,
         EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
     ): Response {
         $event = new Event();
 
@@ -34,19 +37,37 @@ final class EventController extends AbstractController
         ]);
         $eventForm->handleRequest($request);
         if ($eventForm->isSubmitted() && $eventForm->isValid()) {
+            $imageFile = $eventForm->get('eventPicture')->getData();
+
+            if($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeName = $slugger->slug($originalFilename);
+                $newFilename = $safeName . '-' . uniqid() . '.' . $imageFile->guessExtension();
+
+                try{
+                    $imageFile->move(
+                        $this->getParameter('events_directory'),
+                        $newFilename
+                    );
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Erreur upload image :' .$e->getMessage());
+                    return $this->redirectToRoute('events_details');
+                }
+                $event->setImage($newFilename);
+            }
             try {
                 $entityManager->persist($event);
                 $entityManager->flush();
                 $this->addFlash('success', 'Event created');
 
-                return $this->redirectToRoute('events');
+                return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
             } catch (\Exception $e) {
                 $this->addFlash('error', 'An error occurred: '.$e->getMessage());
             }
         }
 
         return $this->render('event/create.html.twig', [
-            'eventForm' => $eventForm,
+            'eventForm' => $eventForm->createView(),
         ]);
     }
 

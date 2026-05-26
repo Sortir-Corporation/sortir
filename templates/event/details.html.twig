@@ -10,6 +10,14 @@
         <div>
 
             <div>
+                <h1>{{ event.name }}</h1>
+
+                {% if event.image %}
+                    <img src="{{ asset('uploads/events/' ~ event.image) }}" alt="Image de l'événement" width="300">
+                {% endif %}
+            </div>
+
+            <div>
                 <strong>Nom de la sortie :</strong>
                 <span>{{ event.name }}</span>
             </div>
