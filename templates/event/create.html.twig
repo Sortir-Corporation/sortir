@@ -3,7 +3,7 @@
 {% block body %}
     {# We combine the layout class (.form-container) with the visual class (.glass-panel) #}
     <div class="form-container glass-panel">
-        <h1>Create a New Event</h1>
+        <h1>Créer un évènement</h1>
 
         {# Display any flash messages here #}
         <div class="flash-messages">
@@ -23,15 +23,17 @@
             <legend>General Details</legend>
 
             <div class="form-group">
-                {{ form_label(eventForm.name, 'Event Name') }}
-                {{ form_widget(eventForm.name) }}
+                {{ form_label(eventForm.name, 'Nom de l\'évènement :') }}
+                {{ form_widget(eventForm.name,{
+                    attr: { placeholder: '(Exemple : Aller au bar)' }
+                }) }}
                 <div class="form-error">
                     {{ form_errors(eventForm.name) }}
                 </div>
             </div>
 
             <div class="form-group">
-                {{ form_label(eventForm.eventInfo, 'Description & Info') }}
+                {{ form_label(eventForm.eventInfo, 'Description :') }}
                 {{ form_widget(eventForm.eventInfo) }}
                 <div class="form-error">
                     {{ form_errors(eventForm.eventInfo) }}
@@ -45,7 +47,7 @@
 
             <div class="form-group-row">
                 <div class="form-group">
-                    {{ form_label(eventForm.startTime, 'Start Time') }}
+                    {{ form_label(eventForm.startTime, 'Date et heure de l\'évènement :') }}
                     {{ form_widget(eventForm.startTime) }}
                     <div class="form-error">
                         {{ form_errors(eventForm.startTime) }}
@@ -53,8 +55,10 @@
                 </div>
 
                 <div class="form-group">
-                    {{ form_label(eventForm.duration, 'Duration (minutes)') }}
-                    {{ form_widget(eventForm.duration) }}
+                    {{ form_label(eventForm.duration, 'Durée de l\'évènement (en minutes) :') }}
+                    {{ form_widget(eventForm.duration,{
+                        attr: { placeholder: '(Exemple : 90 minutes)' }
+                    }) }}
                     <div class="form-error">
                         {{ form_errors(eventForm.duration) }}
                     </div>
@@ -62,7 +66,7 @@
             </div>
 
             <div class="form-group">
-                {{ form_label(eventForm.registrationDeadline, 'Registration Deadline') }}
+                {{ form_label(eventForm.registrationDeadline, 'Date et heure limite d\'inscription :') }}
                 {{ form_widget(eventForm.registrationDeadline) }}
                 <div class="form-error">
                     {{ form_errors(eventForm.registrationDeadline) }}
@@ -76,8 +80,10 @@
 
             <div class="form-group-row">
                 <div class="form-group">
-                    {{ form_label(eventForm.maxParticipants, 'Maximum Participants') }}
-                    {{ form_widget(eventForm.maxParticipants) }}
+                    {{ form_label(eventForm.maxParticipants, 'Nombre attendu de participants :') }}
+                    {{ form_widget(eventForm.maxParticipants,{
+                        attr: { placeholder: 'Entrer une valeur' }
+                    }) }}
                     <div class="form-error">
                         {{ form_errors(eventForm.maxParticipants) }}
                     </div>
@@ -89,17 +95,20 @@
                         Ajouter un nouveau lieu
                     </a>
                     {{ form_widget(eventForm.location) }}
-
                     <div class="form-error">
                         {{ form_errors(eventForm.location) }}
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                {{ form_widget(eventForm.eventPicture) }}
+                {{ form_errors(eventForm.eventPicture) }}
+            </div>
         </fieldset>
 
         {# Submit Button #}
         <div class="form-actions">
-            <button type="submit" class="btn-primary">Create Event</button>
+            <button type="submit" class="btn-primary">Créer</button>
         </div>
 
         {# This will now close the form cleanly without dumping any forgotten fields! #}
