@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Campus;
 use App\Entity\Event;
 use App\Entity\Location;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -34,7 +33,7 @@ class EventType extends AbstractType
                 'mapped' => false, // 👈 TRÈS IMPORTANT : dit à Symfony de ne pas chercher la string en BDD directement pour ce champ
                 'required' => false,
                 'attr' => [
-                    'accept' => 'image/jpeg, image/png'
+                    'accept' => 'image/jpeg, image/png',
                 ],
                 'constraints' => [
                     new File([
@@ -55,5 +54,4 @@ class EventType extends AbstractType
             'data_class' => Event::class,
         ]);
     }
-
 }

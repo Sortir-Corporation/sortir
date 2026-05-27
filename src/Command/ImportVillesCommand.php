@@ -19,7 +19,7 @@ class ImportVillesCommand extends Command
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private ParameterBagInterface $params
+        private ParameterBagInterface $params,
     ) {
         parent::__construct();
     }
@@ -29,10 +29,11 @@ class ImportVillesCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         // Chemin vers ton fichier CSV (dans /data/villes.csv)
-        $csvPath = $this->params->get('kernel.project_dir') . '/data/villes.csv';
+        $csvPath = $this->params->get('kernel.project_dir').'/data/villes.csv';
 
         if (!file_exists($csvPath)) {
             $io->error(sprintf('Le fichier n\'existe pas à l\'emplacement : %s', $csvPath));
+
             return Command::FAILURE;
         }
 
@@ -48,7 +49,6 @@ class ImportVillesCommand extends Command
                 // $data[0] = Nom de la ville (ex: AMBERIEU EN BUGEY)
                 // $data[1] = Code postal (ex: 01500)
                 if (isset($data[0]) && isset($data[1])) {
-
                     // Nettoyage des espaces blancs autour du texte
                     $cityName = trim($data[0]);
                     $zipCode = trim($data[1]);
@@ -58,10 +58,10 @@ class ImportVillesCommand extends Command
                     $city->setZipCode($zipCode);
 
                     $this->em->persist($city);
-                    $count++;
+                    ++$count;
 
                     // Batch processing : On envoie en BDD toutes les 500 lignes
-                    if ($count % 500 === 0) {
+                    if (0 === $count % 500) {
                         $this->em->flush();
                         $this->em->clear(); // Vide la mémoire vive (RAM) de Symfony pour éviter les surcharges
                         $io->text(sprintf('%d villes analysées...', $count));
@@ -74,10 +74,12 @@ class ImportVillesCommand extends Command
             fclose($handle);
 
             $io->success(sprintf('Succès ! %d lignes de villes ont été importées avec succès !', $count));
+
             return Command::SUCCESS;
         }
 
         $io->error('Impossible d\'ouvrir le fichier CSV.');
+
         return Command::FAILURE;
     }
 }

@@ -313,9 +313,11 @@ class Event
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
+
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
         return $this;
     }
 
@@ -323,5 +325,4 @@ class Event
     {
         return $this->image;
     }
-
 }

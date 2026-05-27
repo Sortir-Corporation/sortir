@@ -7,7 +7,6 @@ use App\Enum\EventStatus;
 use App\Form\EventType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,7 +21,7 @@ final class EventController extends AbstractController
     public function create(
         Request $request,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
     ): Response {
         $event = new Event();
 
@@ -39,18 +38,19 @@ final class EventController extends AbstractController
         if ($eventForm->isSubmitted() && $eventForm->isValid()) {
             $imageFile = $eventForm->get('eventPicture')->getData();
 
-            if($imageFile) {
+            if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeName = $slugger->slug($originalFilename);
-                $newFilename = $safeName . '-' . uniqid() . '.' . $imageFile->guessExtension();
+                $newFilename = $safeName.'-'.uniqid().'.'.$imageFile->guessExtension();
 
-                try{
+                try {
                     $imageFile->move(
                         $this->getParameter('events_directory'),
                         $newFilename
                     );
                 } catch (\Exception $e) {
-                    $this->addFlash('error', 'Erreur upload image :' .$e->getMessage());
+                    $this->addFlash('error', 'Erreur upload image :'.$e->getMessage());
+
                     return $this->redirectToRoute('events_details');
                 }
                 $event->setImage($newFilename);
@@ -214,6 +214,7 @@ final class EventController extends AbstractController
         // Validation du jeton CSRF (Sécurité POST)
         if (!$this->isCsrfTokenValid('publish'.$event->getId(), $request->getPayload()->getString('_token'))) {
             $this->addFlash('error', 'Jeton de sécurité invalide.');
+
             return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
         }
 

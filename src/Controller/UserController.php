@@ -35,9 +35,7 @@ final class UserController extends AbstractController
 
         // 2. Vérifier l'existence d'un événement commun en BDD
         if (!$eventRepository->haveCommonEvent($currentUser, $user)) {
-            throw $this->createAccessDeniedException(
-                "Vous ne pouvez consulter le profil d'un participant que si vous partagez un événement en commun."
-            );
+            throw $this->createAccessDeniedException("Vous ne pouvez consulter le profil d'un participant que si vous partagez un événement en commun.");
         }
 
         return $this->render('user/details.html.twig', [
@@ -54,7 +52,6 @@ final class UserController extends AbstractController
         CampusRepository $campusRepository,
         UserPasswordHasherInterface $passwordHasher,
     ): Response {
-
         $currentUser = $this->getUser();
 
         if (!$currentUser) {
@@ -63,7 +60,7 @@ final class UserController extends AbstractController
 
         // 1. SÉCURITÉ DE BASE : Il faut être soit l'admin, soit le propriétaire du compte
         if (!$this->isGranted('ROLE_ADMIN') && $currentUser->getId() !== $user->getId()) {
-            throw $this->createAccessDeniedException("Accès interdit.");
+            throw $this->createAccessDeniedException('Accès interdit.');
         }
 
         // 2. SAUVEGARDE DE L'ÉTAT D'ORIGINE (Pour le cloisonnement des rôles)
@@ -82,7 +79,6 @@ final class UserController extends AbstractController
 
         // Si l'utilisateur a cliqué sur "MODIFIER"
         if ($form->isSubmitted() && $form->isValid()) {
-
             // CAS A : C'est le PROPRIÉTAIRE qui modifie son propre profil
             if ($currentUser->getId() === $user->getId()) {
                 // Sécurité : Le propriétaire ne peut pas modifier son statut 'active'
@@ -128,7 +124,6 @@ final class UserController extends AbstractController
     #[Route('/delete', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $em, Security $security): Response
     {
-
         $currentUser = $this->getUser();
         if (!$currentUser) {
             return $this->redirectToRoute('app_login');
@@ -141,7 +136,6 @@ final class UserController extends AbstractController
 
         // SÉCURITÉ : Vérification du token CSRF
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
-
             // Déconnexion automatique si l'utilisateur supprime son propre compte
             if ($currentUser->getId() === $user->getId()) {
                 $security->logout(false);

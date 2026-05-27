@@ -59,7 +59,6 @@ final class LocationController extends AbstractController
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-
     public function edit(Location $location, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(LocationType::class, $location);

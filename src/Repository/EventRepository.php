@@ -88,11 +88,9 @@ class EventRepository extends ServiceEntityRepository
             ->innerJoin('e.users', 'u2', 'WITH', 'u2.id = :userB')
             ->setParameters([
                 'userA' => $userA->getId(),
-                'userB' => $userB->getId()
+                'userB' => $userB->getId(),
             ]);
 
         return (int) $qb->getQuery()->getSingleScalarResult() > 0;
     }
-
-
 }
