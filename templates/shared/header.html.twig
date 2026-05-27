@@ -17,16 +17,21 @@
                         Créer un évènement
                     </a>
                 </li>
+                {% if is_granted('ROLE_ADMIN') %}
                 <li>
                     <a href="{{ path('campus_campus_list') }}"
                        class="{{ app.request.attributes.get('_route') == 'campus_campus_list' ? 'active' : '' }}">
                         Campus
                     </a>
                 </li>
-                <li>
-                    {% if app.user %}
-                        <span>Bonjour, {{ app.user.alias }}</span>
-                </li>
+                {% endif %}
+                    <li>
+                        {% if app.user %}
+                            <a href="{{ path('user_details', {id: app.user.id}) }}"
+                               class="{{ app.request.attributes.get('_route') == 'user_details' ? 'active' : '' }}">
+                                Profil : {{ app.user.alias }}
+                            </a>
+                    </li>
                     <li>
                         <a href="{{ path('app_logout') }}"
                            class="btn btn-danger btn-sm"
@@ -40,21 +45,6 @@
                     {% endif %}
                     </li>
 
-                 <li>
-                     {% if app.user %}
-                    <a href="{{ path('user_details', {id: app.user.id}) }}"
-                       class="{{ app.request.attributes.get('_route') == 'user_details' ? 'active' : '' }}">
-                        Mon profil
-                    </a>
-                     {% endif %}
-                </li>
-
-{#                <li>#}
-{#                    <a href="{{ path('app_login') }}"#}
-{#                       class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">#}
-{#                        Se connecter#}
-{#                    </a>#}
-{#                </li>#}
             </ul>
         </nav>
     </div>
