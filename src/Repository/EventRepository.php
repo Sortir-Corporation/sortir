@@ -38,10 +38,18 @@ class EventRepository extends ServiceEntityRepository
             ->addSelect('c', 'o', 'l')
             ->orderBy('e.startTime', 'ASC');
 
-        // Sorties annulées visibles uniquement par l'organisateur
-        $qb->andWhere('e.status != :cancelled OR e.organizer = :user')
+        // 1. L'événement ne doit PAS être un brouillon (CREATED) OU alors il est en brouillon mais l'utilisateur en est l'organisateur.
+        // 2. S'il est annulé (CANCELED), seul l'organisateur le voit.
+        $qb->andWhere(
+            $qb->expr()->andX(
+                'e.status != :created OR e.organizer = :user',
+                'e.status != :cancelled OR e.organizer = :user'
+            )
+        )
+            ->setParameter('created', EventStatus::CREATED) // Adaptez le nom de la case si c'est EventStatus::DRAFT ou autre
             ->setParameter('cancelled', EventStatus::CANCELED)
             ->setParameter('user', $user);
+        // -------------------------
 
         if (!$showPast) {
             $qb->andWhere('e.startTime >= :today')
