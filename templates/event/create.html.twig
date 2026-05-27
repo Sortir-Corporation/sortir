@@ -135,16 +135,7 @@
             </div>
         </fieldset>
 
-{#        <fieldset class="form-section">#}
-{#            <div class="form-group picture-upload-group">#}
-{#                <label id="uploadLabel" class="picture-upload-label glass-panel" for="imageUpload">#}
-{#                    <span class="upload-text">Image de l'évènement : <span class="action-text">Choisir une image</span></span>#}
-{#                </label>#}
-{#                <input type="file" id="imageUpload" style="display: none;" accept="image/*">#}
-{#                }</div>#}
-{#        </fieldset>#}
-
-        {# Submit Button #}
+        {# Button Créer #}
         <div class="form-actions">
             <button type="submit" class="btn-primary">Créer</button>
         </div>
@@ -152,6 +143,11 @@
         {# This will now close the form cleanly without dumping any forgotten fields! #}
         {{ form_end(eventForm) }}
     </div>
+    {% else %}
+        <div class>
+            <p>Vous devez être connecté pour créer un événement.</p>
+            <a href="{{ path('app_login') }}">Se connecter</a>
+        </div>
     {%  endif %}
 {% endblock %}
 

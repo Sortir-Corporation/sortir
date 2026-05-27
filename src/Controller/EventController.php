@@ -58,7 +58,7 @@ final class EventController extends AbstractController
             try {
                 $entityManager->persist($event);
                 $entityManager->flush();
-                $this->addFlash('success', 'Event created');
+                $this->addFlash('success', 'Sortie créée');
 
                 return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
             } catch (\Exception $e) {
@@ -76,24 +76,16 @@ final class EventController extends AbstractController
         Event $event,
         EntityManagerInterface $entityManager,
     ): Response {
-        if (!$event->isPublished()) {
-            $this->addFlash('error', 'Event is not published');
-            //            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
-        }
+        // On vérifie d'ABORD si l'événement est encore ouvert aux modifications
+        if (EventStatus::OPEN !== $event->getStatus()) {
+            $this->addFlash('error', 'La sortie n\'est plus ouverte aux inscriptions');
 
-        if (!$event->isRegistrationOpen()) {
-            $this->addFlash('error', 'Registration deadline has passed');
-            //            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
-        }
-
-        if (!$event->hasFreeSlots()) {
-            $this->addFlash('error', 'This event is full');
-            //            return $this->redirectToRoute('events_details', ['id'=>$event->getId()]);
+            return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
         }
 
         $user = $this->getUser();
         if (!$user) {
-            $this->addFlash('error', 'You must be logged in to register');
+            $this->addFlash('error', 'vous devez être connecté pour vous inscrire');
 
             return $this->redirectToRoute('app_login');
         }
@@ -127,14 +119,14 @@ final class EventController extends AbstractController
         $user = $this->getUser();
 
         if (!$user) {
-            $this->addFlash('error', 'You must be logged in to unregister.');
+            $this->addFlash('error', 'Vous devez être connecté pour vous inscrire');
 
             return $this->redirectToRoute('app_login');
         }
 
         // 2. On vérifie d'ABORD si l'événement est encore ouvert aux modifications
         if (EventStatus::OPEN !== $event->getStatus()) {
-            $this->addFlash('error', 'You cannot unregister because this event is no longer open.');
+            $this->addFlash('error', 'Cette sortie n\'est plus ouverte aux inscriptions');
 
             return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
         }
