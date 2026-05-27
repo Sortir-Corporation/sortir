@@ -163,7 +163,8 @@ input[type="file"]::file-selector-button:hover {
 /* The main wrapper (Use alongside .glass-panel in HTML) */
 .form-container {
     max-width: 800px;
-    margin: 4rem auto;
+    width: 100%;
+    margin: 0 auto 3rem auto;
     padding: 3rem;
     border-radius: 24px;
 }
@@ -180,7 +181,6 @@ input[type="file"]::file-selector-button:hover {
 /* Sections and Titles */
 .form-section {
     border: none;
-    margin: 0 0 2.5rem 0;
     padding: 0;
 }
 
@@ -220,8 +220,8 @@ input[type="file"]::file-selector-button:hover {
 
 /* Form Errors */
 .form-error {
-    color: #ff6b6b; /* A soft pastel red that reads well on dark backgrounds */
-    font-size: 0.85rem;
+    color: #bf2626; /* A soft pastel red that reads well on dark backgrounds */
+    font-size: 0.9rem;
     margin-top: 0.5rem;
     font-weight: 500;
 }
@@ -237,4 +237,89 @@ input[type="file"]::file-selector-button:hover {
         padding: 2rem 1.5rem;
         margin: 2rem 1rem;
     }
+}
+
+/* Flex container to push label left and link right */
+.label-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+/* Remove the default margin on the label since the flex container handles spacing */
+.label-header label {
+    margin-bottom: 0;
+}
+
+/* Style for the add link */
+.add-link {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.add-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+
+/* Image upload styling */
+
+/* Styling for the picture upload container */
+.picture-upload-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem; /* Add some spacing above the upload section */
+}
+
+/* Style for the button-like label, adhering to your glass aesthetics */
+.picture-upload-label {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: rgba(255, 255, 255, 0.08); /* Initial glass background */
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.picture-upload-label:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Slight highlight on hover */
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/*!* Styles for the text within the label *!*/
+/*.upload-text {*/
+/*    !*font-size: 1.1rem;*!*/
+/*    !*color: rgba(255, 255, 255, 0.9);*!*/
+/*}*/
+
+.action-text {
+    font-weight: 700;
+}
+
+/* Specific styling for the green glass "image uploaded" state */
+.picture-upload-label.image-uploaded {
+    background-color: rgba(76, 175, 80, 0.15); /* Faint green glass background */
+    border-color: rgba(76, 175, 80, 0.5); /* Slightly brighter green border */
+    color: rgba(255, 255, 255, 1);
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3); /* Green glow effect */
+}
+
+.picture-upload-label.image-uploaded .upload-text {
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Slightly darken the green on hover for better visibility */
+.picture-upload-label.image-uploaded:hover {
+    background-color: rgba(76, 175, 80, 0.25);
+    border-color: rgba(76, 175, 80, 0.8);
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
 }
