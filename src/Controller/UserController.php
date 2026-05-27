@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\CampusRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('user/{id}', name: 'user_')]
 final class UserController extends AbstractController
@@ -38,7 +40,7 @@ final class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        // Si l'utilisateur a cliqué sur "MODIFIER"
+        // Si l'utilisateur a cliqué sur "MODIFIER."
         if ($form->isSubmitted() && $form->isValid()) {
             // 2. On récupère la valeur du champ password
             $newPassword = $form->get('password')->getData();
@@ -82,5 +84,20 @@ final class UserController extends AbstractController
         $this->addFlash('error', 'Token CSRF invalide, suppression annulée.');
 
         return $this->redirectToRoute('user_details', ['id' => $user->getId()]);
+    }
+
+    //    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/list', name: 'list', methods: ['GET'])]
+    public function list(Request $request, UserRepository $userRepository): Response{
+        $search = $request->query->get('q');
+        if ($search) {
+            $users = $userRepository->findBySearch($search);
+        }else {
+            $users = $userRepository->findAll();
+        }
+        return $this->render('admin/list.html.twig', [
+            'users' => $users,
+            'search' => $search,
+        ]);
     }
 }

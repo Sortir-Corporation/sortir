@@ -56,5 +56,4 @@ class EventType extends AbstractType
             'data_class' => Event::class,
         ]);
     }
-
 }
