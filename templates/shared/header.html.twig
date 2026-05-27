@@ -12,9 +12,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('cities_city_list') }}"
-                       class="{{ app.request.attributes.get('_route') == 'cities_city_list' ? 'active' : '' }}">
-                        Villes
+                    <a href="{{ path('events_create') }}"
+                       class="{{ app.request.attributes.get('_route') == 'events_create' ? 'active' : '' }}">
+                        Créer un évènement
                     </a>
                 </li>
                 <li>
@@ -26,8 +26,11 @@
                 <li>
                     {% if app.user %}
                         <span>Bonjour, {{ app.user.alias }}</span>
-
-                        <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm">
+                </li>
+                    <li>
+                        <a href="{{ path('app_logout') }}"
+                           class="btn btn-danger btn-sm"
+                        onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');">
                             Déconnexion
                         </a>
                     {% else %}
@@ -35,7 +38,17 @@
                             Connexion
                         </a>
                     {% endif %}
+                    </li>
+
+                 <li>
+                     {% if app.user %}
+                    <a href="{{ path('user_details', {id: app.user.id}) }}"
+                       class="{{ app.request.attributes.get('_route') == 'user_details' ? 'active' : '' }}">
+                        Mon profil
+                    </a>
+                     {% endif %}
                 </li>
+
 {#                <li>#}
 {#                    <a href="{{ path('app_login') }}"#}
 {#                       class="{{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}">#}
