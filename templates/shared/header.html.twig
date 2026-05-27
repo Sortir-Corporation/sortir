@@ -24,6 +24,12 @@
                         Campus
                     </a>
                 </li>
+                <li>
+                    <a href="{{ path('user_list')}}"
+                       class="{{ app.request.attributes.get('_route') == 'user_list' ? 'active' : '' }}">
+                        Gestion des Profils
+                    </a>
+                </li>
                 {% endif %}
                     <li>
                         {% if app.user %}

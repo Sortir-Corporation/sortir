@@ -1,3 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+    {# On vérifie que l'utilisateur est connecté (ROLE_USER ou ROLE_ADMIN par héritage) #}
+    {% if is_granted('ROLE_ADMIN') %}
 <h1>Liste des utilisateurs</h1>
 
 <form method="get">
@@ -15,6 +22,7 @@
         <th>Nom</th>
         <th>Prénom</th>
         <th>Rôles</th>
+        <th>Compte actif</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -26,10 +34,31 @@
             <td>{{ user.lastname }}</td>
             <td>{{ user.firstname }}</td>
             <td>{{ user.roles|join(', ') }}</td>
+            <td>{# Formulaire pour basculer le statut Actif / Inactif #}
+                <form method="post"
+                      action="{{ path('user_admin_toggle_active', {id: user.id}) }}"
+                      style="display:inline;"
+                      onsubmit="return confirm('{{ user.active ? "Êtes-vous sûr de vouloir désactiver ce compte ?" : "Êtes-vous sûr de vouloir réactiver ce compte ?" }}');">
+
+                    {# Jeton de sécurité CSRF #}
+                    <input type="hidden" name="_token" value="{{ csrf_token('toggle-active' ~ user.id) }}">
+
+                    {% if user.active %}
+                        {# Bouton vert "Coché" / Actif #}
+                        <button type="submit" class="btn btn-sm btn-success">
+                            🟢 Actif (Désactiver)
+                        </button>
+                    {% else %}
+                        {# Bouton rouge "Décoché" / Inactif #}
+                        <button type="submit" class="btn btn-sm btn-secondary">
+                            🔴 Inactif (Activer)
+                        </button>
+                    {% endif %}
+                </form>
+            </td>
             <td>
                 <form method="post"
-                      action="{{ path('admin_delete', {id:user.id}) }}"
-                      style="display:inline"
+                      action="{{ path('user_delete', {id:user.id}) }}"
                       onsubmit="return confirm('Supprimer cet utilisateurs ?');">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
                  <button type="submit">Supprimer</button>
@@ -38,8 +67,13 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="5">Aucun utilisateur trouvé</td>
+            <td colspan="7">Aucun utilisateur trouvé</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+    {% else %}
+        {# Message si l'utilisateur n'est pas Admin #}
+        <p>Accès refusé. Vous devez être administrateur pour voir cette page.</p>
+    {% endif %}
+{% endblock %}

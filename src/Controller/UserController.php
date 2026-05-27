@@ -16,10 +16,27 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/user/{id}', name: 'user_')]
+#[Route('/user', name: 'user_')]
 final class UserController extends AbstractController
 {
-    #[Route('', name: 'details', methods: ['GET'])]
+    #[Route('/list', name: 'list', methods: ['GET'])]
+    #[isGranted('ROLE_ADMIN')]
+    public function list(Request $request, UserRepository $userRepository): Response
+    {
+        $search = $request->query->get('q');
+        if ($search) {
+            $users = $userRepository->findBySearch($search);
+        } else {
+            $users = $userRepository->findAll();
+        }
+
+        return $this->render('admin/list.html.twig', [
+            'users' => $users,
+            'search' => $search,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'details', methods: ['GET'])]
     public function details(User $user, EventRepository $eventRepository): Response
     {
         $currentUser = $this->getUser();
@@ -45,7 +62,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     // On injecte CampusRepository pour appeler le campus rattaché à l'utilisateur avec une boucle
     public function edit(
         Request $request,
@@ -123,7 +140,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/delete', name: 'delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $em, Security $security): Response
     {
         $currentUser = $this->getUser();
@@ -159,20 +176,35 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('user_details', ['id' => $user->getId()]);
     }
 
-    //    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/list', name: 'list', methods: ['GET'])]
-    public function list(Request $request, UserRepository $userRepository): Response
-    {
-        $search = $request->query->get('q');
-        if ($search) {
-            $users = $userRepository->findBySearch($search);
-        } else {
-            $users = $userRepository->findAll();
+    #[Route('/{id}/toggle-active', name: 'admin_toggle_active', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function toggleActive(
+        Request $request,
+        User $user,
+        EntityManagerInterface $em
+    ): Response {
+        // 1. Validation du jeton de sécurité CSRF
+        if (!$this->isCsrfTokenValid('toggle-active'.$user->getId(), $request->getPayload()->getString('_token'))) {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
+            return $this->redirectToRoute('user_list'); // Remplace par le nom exact de ta route de liste
         }
 
-        return $this->render('admin/list.html.twig', [
-            'users' => $users,
-            'search' => $search,
-        ]);
+        // 2. On inverse le statut (si 1 devient 0, si 0 devient 1)
+        // Note : Assure-toi d'avoir les méthodes isActive() et setActive() dans ton entité User
+        $newStatus = !$user->isActive();
+        $user->setActive($newStatus);
+
+        $em->flush();
+
+        // 3. Message flash personnalisé selon le nouvel état
+        if ($newStatus) {
+            $this->addFlash('success', 'Le compte de ' . $user->getEmail() . ' a été réactivé.');
+        } else {
+            $this->addFlash('warning', 'Le compte de ' . $user->getEmail() . ' a été désactivé.');
+        }
+
+        // 4. Retour à la liste globale
+        return $this->redirectToRoute('user_list');
     }
+
 }
