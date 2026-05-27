@@ -16,9 +16,11 @@
 <div>
     <div class="mb-3">
         {{ form_label(locationForm.city, 'Ville', {'label_attr': {'class': 'form-label'}}) }}
-        <a href="{{ path('cities_city_new') }}" class="link">
-            Ajouter une nouvelle ville...
-        </a>
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('cities_city_new') }}" class="link">
+                Ajouter une nouvelle ville...
+            </a>
+            {% endif %}
         {{ form_widget(locationForm.city, {'attr': {'class': 'form-control', 'placeholder': 'Sélectionner une ville...'}}) }}
         {{ form_errors(locationForm.city) }}
     </div>

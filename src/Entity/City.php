@@ -90,4 +90,10 @@ class City
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        // Remplace 'name' par la propriété qui contient le nom de ta ville (ex: $this->name)
+        return $this->name ?? '';
+    }
 }
