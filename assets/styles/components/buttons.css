@@ -1,6 +1,6 @@
 /* Aligns the button to the right inside the form */
 .form-actions {
-    margin-top: 3rem;
+        /*margin-top: 1.5rem;*/
     display: flex;
     justify-content: flex-end;
 }
@@ -15,11 +15,13 @@
 
     padding: 1rem 2.5rem;
     border: none;
-    border-radius: 50px;
+    border-radius: 12px;
     cursor: pointer;
 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+
+    width: 30%;
 }
 
 .btn-primary:hover {

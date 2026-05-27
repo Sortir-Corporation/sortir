@@ -1,4 +1,7 @@
+{% if is_granted("ROLE_ADMIN") %}
+
 {{ form_start(form) }}
+
 <div>
     {{ form_label(form.name, "Nom du campus", {'label_attr': {'class': 'form-label'}}) }}
     {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Nantes'}}) }}
@@ -19,3 +22,5 @@
 </div>
 
 {{ form_end(form, {'render_rest': false}) }}
+
+{%  endif %}

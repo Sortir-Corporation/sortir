@@ -98,7 +98,7 @@ class Event
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -110,7 +110,7 @@ class Event
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTime $startTime): static
+    public function setStartTime(?\DateTime $startTime): static
     {
         $this->startTime = $startTime;
 
@@ -122,7 +122,7 @@ class Event
         return $this->duration;
     }
 
-    public function setDuration(int $duration): static
+    public function setDuration(?int $duration): static
     {
         $this->duration = $duration;
 
@@ -134,7 +134,7 @@ class Event
         return $this->registrationDeadline;
     }
 
-    public function setRegistrationDeadline(\DateTime $registrationDeadline): static
+    public function setRegistrationDeadline(?\DateTime $registrationDeadline): static
     {
         $this->registrationDeadline = $registrationDeadline;
 
@@ -146,7 +146,7 @@ class Event
         return $this->maxParticipants;
     }
 
-    public function setMaxParticipants(int $maxParticipants): static
+    public function setMaxParticipants(?int $maxParticipants): static
     {
         $this->maxParticipants = $maxParticipants;
 

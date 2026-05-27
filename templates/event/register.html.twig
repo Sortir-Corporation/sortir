@@ -3,6 +3,8 @@
 {% block title %}Inscription à {{ event.name }}{% endblock %}
 
 {% block body %}
+    {# On vérifie que l'utilisateur est connecté (ROLE_USER ou ROLE_ADMIN par héritage) #}
+    {% if is_granted('ROLE_USER') %}
 
     <h1>Inscription à l'événement : {{ event.name }}</h1>
 
@@ -42,5 +44,6 @@
             Retour
         </a>
     </form>
+    {% endif %}
 
 {% endblock %}

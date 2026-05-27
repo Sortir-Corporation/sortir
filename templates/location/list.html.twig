@@ -3,6 +3,8 @@
 {% block title %}Gérer les lieux{% endblock %}
 
 {% block body %}
+    {# On vérifie que l'utilisateur est connecté (ROLE_USER ou ROLE_ADMIN par héritage) #}
+    {% if is_granted('ROLE_USER') %}
     <h1>Gérer les lieux</h1>
 
     <h3>Filtrer les lieux</h3>
@@ -78,6 +80,5 @@
 
         </tbody>
     </table>
-
-
+    {% endif %}
 {% endblock %}

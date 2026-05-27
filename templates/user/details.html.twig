@@ -28,10 +28,6 @@
             <span class="value">{{ user.email }}</span>
         </div>
         <div>
-            <span class="label">Mot de passe :</span>
-            <span class="value">{{ user.password }}</span>
-        </div>
-        <div>
             <span class="label">Campus :</span>
             <span class="value">{{ user.campus.name }}</span>
         </div>
@@ -39,10 +35,12 @@
             <span class="label">Ma photo :</span>
             <span class="value">{{ user.profilePicture }}</span>
         </div>
-
+        {# Le bouton de modification n'apparaît QUE si c'est MON profil OU si je suis ADMIN #}
+        {% if is_granted('ROLE_ADMIN') or (app.user and app.user.id == user.id) %}
         <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-warning">
             Modifier / Supprimer mon compte
         </a>
+        {% endif %}
     </div>
 <hr>
     <h2>Mes sorties / évênements :</h2>
@@ -77,24 +75,31 @@
                     <div class="d-flex gap-2 align-items-center">
                         <a href="{{ path('events_details', {'id': event.id}) }}" class="btn btn-sm btn-outline-secondary">Voir le détail</a>
 
-                        {# NOUVEAU bouton Publier : visible uniquement si le statut est CREATED #}
-                        {% if event.status.name == 'CREATED' %}
-                            <form action="{{ path('events_publish', {'id': event.id}) }}" method="GET">
-                                <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Voulez-vous vraiment publier cette sortie ? Les inscriptions seront ouvertes.');">
-                                    Publier la sortie
-                                </button>
-                            </form>
-                        {% endif %}
+                        {# Actions d'organisation : Uniquement si je suis le propriétaire de ce profil #}
+                        {% if app.user and app.user.id == user.id %}
 
-                        {# Bouton Annuler : visible uniquement si l'événement n'est pas déjà annulé ou passé #}
-                        {% if event.status.name != 'CANCELED' and event.status.name != 'PAST' %}
-                            <a href="{{ path('events_cancel', {'id': event.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');">
-                                Annuler la sortie
-                            </a>
+                            {# NOUVEAU bouton Publier : visible uniquement si le statut est CREATED #}
+                            {% if event.status.name == 'CREATED' %}
+                                <form action="{{ path('events_publish', {'id': event.id}) }}" method="GET">
+                                    <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Voulez-vous vraiment publier cette sortie ? Les inscriptions seront ouvertes.');">
+                                        Publier la sortie
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            {# Bouton Annuler : visible uniquement si l'événement n'est pas déjà annulé ou passé #}
+                            {% if event.status.name != 'CANCELED' and event.status.name != 'PAST' %}
+                                <a href="{{ path('events_cancel', {'id': event.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette sortie ?');">
+                                    Annuler la sortie
+                                </a>
+
+                            {% endif %}
+
                         {% endif %}
                     </div>
                 </div>
         {% endfor %}
+
         {# 2. Événements rejoints (partakenEvents) #}
         {% for event in user.partakenEvents %}
             <div class="event-item card mb-2 p-3" data-type="attending">
@@ -108,14 +113,16 @@
 {#                        {{ event.status.value|default(event.status.name)|default('N/A') }}#}
 {#                    </span>#}
                         <a href="{{ path('events_details', {'id': event.id}) }}" class="btn btn-sm btn-link">Voir le détail</a>
-                    {# Lien de désinscription : utilise votre méthode unregister() de l'EventController #}
-                    {% if event.status.name == 'OPEN' %}
-                        <a href="{{ path('events_unRegister', {'id': event.id}) }}" class="btn btn-sm btn-warning" onclick="return confirm('Se désinscrire de cette sortie ?');">
-                            Se désinscrire
-                        </a>
-                    {% endif %}
+
+                        {# 🔒 Bouton désinscription : Uniquement si c'est MON profil qui consulte #}
+                        {% if app.user and app.user.id == user.id and event.status.name == 'OPEN' %}
+
+                            <a href="{{ path('events_unRegister', {'id': event.id}) }}" class="btn btn-sm btn-warning" onclick="return confirm('Se désinscrire de cette sortie ?');">
+                                Se désinscrire
+                            </a>
+
+                        {% endif %}
                     </div>
-                </div>
             </div>
         {% endfor %}
 

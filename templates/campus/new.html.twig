@@ -3,6 +3,7 @@
 {% block title %}Ajouter un campus{% endblock %}
 
 {% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
     <div class="container mt-4">
         <h1>Ajouter un nouveau campus</h1>
         <hr>
@@ -10,4 +11,5 @@
         {# On inclut le formulaire générique #}
         {{ include('campus/_form.html.twig', {'button_label': 'Créer le campus'}) }}
     </div>
+    {% endif %}
 {% endblock %}

@@ -79,4 +79,18 @@ class EventRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function haveCommonEvent(User $userA, User $userB): bool
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.id)')
+            ->innerJoin('e.users', 'u1', 'WITH', 'u1.id = :userA')
+            ->innerJoin('e.users', 'u2', 'WITH', 'u2.id = :userB')
+            ->setParameters([
+                'userA' => $userA->getId(),
+                'userB' => $userB->getId(),
+            ]);
+
+        return (int) $qb->getQuery()->getSingleScalarResult() > 0;
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Campus;
 use App\Entity\Event;
 use App\Entity\Location;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -23,10 +22,6 @@ class EventType extends AbstractType
             ->add('registrationDeadline')
             ->add('maxParticipants')
             ->add('eventInfo')
-//            ->add('campus', EntityType::class, [
-//                'class' => Campus::class,
-//                'choice_label' => 'id',
-//            ])
             ->add('location', EntityType::class, [
                 'class' => Location::class,
                 'placeholder' => 'Choisir un lieu...',
@@ -37,6 +32,9 @@ class EventType extends AbstractType
                 'label' => 'Event Picture',
                 'mapped' => false, // 👈 TRÈS IMPORTANT : dit à Symfony de ne pas chercher la string en BDD directement pour ce champ
                 'required' => false,
+                'attr' => [
+                    'accept' => 'image/jpeg, image/png',
+                ],
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',

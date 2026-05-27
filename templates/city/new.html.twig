@@ -3,9 +3,11 @@
 {% block title %}Ajouter une ville{% endblock %}
 
 {% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
     <div>
         <h1>Ajouter une nouvelle ville</h1>
         <hr>
         {{ include('city/_form.html.twig', {'button_label': 'Créer la ville'}) }}
     </div>
+    {% endif %}
 {% endblock %}

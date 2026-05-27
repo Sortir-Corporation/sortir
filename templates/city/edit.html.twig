@@ -3,6 +3,7 @@
 {% block title %}Modifier une ville{% endblock %}
 
 {% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
     <div class="container mt-4">
         <h1>Modifier la ville : {{ city.name }}</h1>
         <hr>
@@ -21,4 +22,5 @@
             </button>
         {% endif %}
     </div>
+    {% endif %}
 {% endblock %}
