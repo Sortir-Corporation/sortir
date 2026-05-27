@@ -3,6 +3,7 @@
 {% block title %}Gérer les villes{% endblock %}
 
 {% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
     <h1>Gérer les villes</h1>
 
     <h3>Filtrer les villes</h3>
@@ -80,5 +81,5 @@
         </tbody>
     </table>
 
-
+{% endif %}
 {% endblock %}

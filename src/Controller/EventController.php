@@ -152,7 +152,7 @@ final class EventController extends AbstractController
         return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
     }
 
-    #[Route('/{id}/cancel', name: 'cancel', methods: ['GET'])]
+    #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'])]
     public function cancel(Request $request, Event $event, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
@@ -208,6 +208,12 @@ final class EventController extends AbstractController
         if ($event->getOrganizer()->getId() !== $user->getId()) {
             $this->addFlash('error', 'Vous n\'êtes pas l\'organisateur de cette sortie.');
 
+            return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
+        }
+
+        // Validation du jeton CSRF (Sécurité POST)
+        if (!$this->isCsrfTokenValid('publish'.$event->getId(), $request->getPayload()->getString('_token'))) {
+            $this->addFlash('error', 'Jeton de sécurité invalide.');
             return $this->redirectToRoute('events_details', ['id' => $event->getId()]);
         }
 

@@ -10,11 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('location', name: 'location_')]
 final class LocationController extends AbstractController
 {
     #[Route('', name: 'list', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function list(LocationRepository $locationRepository, Request $request): Response
     {
         // 1. On récupère la recherche (?q=...)
@@ -33,6 +35,7 @@ final class LocationController extends AbstractController
     }
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $location = new Location();
@@ -55,6 +58,8 @@ final class LocationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+
     public function edit(Location $location, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(LocationType::class, $location);
@@ -75,6 +80,7 @@ final class LocationController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Location $location, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($location);

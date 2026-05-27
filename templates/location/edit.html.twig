@@ -3,6 +3,8 @@
 {% block title %}Modifier un lieu{% endblock %}
 
 {% block body %}
+    {# On vérifie que l'utilisateur est connecté (ROLE_USER ou ROLE_ADMIN par héritage) #}
+    {% if is_granted('ROLE_ADMIN') %}
     <div class>
         <h1>Modifier le lieu : {{ location.name }}</h1>
         <hr>
@@ -21,4 +23,5 @@
             </button>
         {% endif %}
     </div>
+    {% endif %}
 {% endblock %}

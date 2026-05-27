@@ -3,6 +3,7 @@
 {% block title %}Liste des campus{% endblock %}
 
 {% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
     <h1 class="mb-4">Liste des campus</h1>
 
     <h3>Filtrer les campus</h3>
@@ -73,5 +74,6 @@
         </tr>
         </tbody>
     </table>
+    {% endif %}
 {% endblock %}
 

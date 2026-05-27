@@ -3,6 +3,7 @@
 {% block title %}Modifier un campus{% endblock %}
 
 {% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
     <div class>
         <h1>Modifier le campus : {{ campus.name }}</h1>
         <hr>
@@ -21,4 +22,5 @@
             </button>
         {% endif %}
     </div>
+    {% endif %}
 {% endblock %}

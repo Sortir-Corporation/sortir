@@ -1,3 +1,5 @@
+{# On vérifie que l'utilisateur est connecté (ROLE_USER ou ROLE_ADMIN par héritage) #}
+    {% if is_granted('ROLE_USER') %}
 {{ form_start(locationForm) }}
 <div class>
     {{ form_label(locationForm.name, "Nom du lieu", {'label_attr': {'class': 'form-label'}}) }}
@@ -38,4 +40,5 @@
     <a href="{{ path('location_list') }}" class="btn btn-secondary">Annuler</a>
 
 </div>
+{% endif %}
 {{ form_end(locationForm) }}

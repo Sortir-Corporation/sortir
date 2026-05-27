@@ -3,6 +3,7 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
     <h1>Créer son compte</h1>
 
     {{ form_errors(registrationForm) }}
@@ -38,4 +39,5 @@
 
         <button type="submit" class="btn">Register</button>
     {{ form_end(registrationForm) }}
+    {% endif %}
 {% endblock %}

@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {# On vérifie que l'utilisateur est connecté (ROLE_USER ou ROLE_ADMIN par héritage) #}
+    {% if is_granted('ROLE_USER') %}
     {# We combine the layout class (.form-container) with the visual class (.glass-panel) #}
     <div class="form-container glass-panel">
         <h1>Créer un évènement</h1>
@@ -114,4 +116,5 @@
         {# This will now close the form cleanly without dumping any forgotten fields! #}
         {{ form_end(eventForm) }}
     </div>
+    {%  endif %}
 {% endblock %}

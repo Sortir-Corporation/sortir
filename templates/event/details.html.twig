@@ -3,6 +3,8 @@
 {% block title %}Afficher une sortie{% endblock %}
 
 {% block body %}
+    {# On vérifie que l'utilisateur est connecté (ROLE_USER ou ROLE_ADMIN par héritage) #}
+    {% if is_granted('ROLE_USER') %}
     <div>
 
         <h1>Afficher une sortie</h1>
@@ -97,15 +99,25 @@
             <tbody>
             {% for user in event.users %}
                 <tr>
-                    <td>{{ user.alias }}</td>
-                    <td>{{ user.firstname }} {{ user.lastname }}</td>
+                    {# Le pseudo devient un lien vers la page détails du profil #}
                     <td>
-                        <a href="{{ path('events_unRegister', {id: event.id}) }}">Se désinscrire</a>
+                        <a href="{{ path('user_details', {id: user.id}) }}">{{ user.alias }}</a>
+                    </td>
+                    {# Attention au CamelCase : firstname -> firstName, lastname -> lastName #}
+                    <td>{{ user.firstName }} {{ user.lastName }}</td>
+                    <td>
+                        {# L'action "Se désinscrire" n'apparaît QUE sur la ligne de l'utilisateur connecté #}
+                        {% if app.user and app.user.id == user.id %}
+                            <a href="{{ path('events_unRegister', {id: event.id}) }}" class="btn-unregister">Se désinscrire</a>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td>Aucun participant inscrit pour le moment.</td>
+                    {# colspan="3" pour que le message prenne toute la largeur des 3 colonnes proprement #}
+                    <td colspan="3">Aucun participant inscrit pour le moment.</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -149,13 +161,8 @@
                 {% endif %}
             {% endif %}
         </div>
-
-
-
         <div>
-
-
         </div>
-
     </div>
+    {% endif %}
 {% endblock %}

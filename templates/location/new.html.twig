@@ -3,9 +3,12 @@
 {% block title %}Ajouter un lieu{% endblock %}
 
 {% block body %}
+    {# On vérifie que l'utilisateur est connecté (ROLE_USER ou ROLE_ADMIN par héritage) #}
+    {% if is_granted('ROLE_USER') %}
     <div class>
         <h1>Ajouter un nouveau lieu</h1>
         <hr>
         {{ include('location/_form.html.twig', {'button_label': 'Créer le lieu'}) }}
     </div>
+    {% endif %}
 {% endblock %}
