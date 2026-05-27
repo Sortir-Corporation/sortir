@@ -88,13 +88,15 @@ final class UserController extends AbstractController
 
     //    #[IsGranted('ROLE_ADMIN')]
     #[Route('/list', name: 'list', methods: ['GET'])]
-    public function list(Request $request, UserRepository $userRepository): Response{
+    public function list(Request $request, UserRepository $userRepository): Response
+    {
         $search = $request->query->get('q');
         if ($search) {
             $users = $userRepository->findBySearch($search);
-        }else {
+        } else {
             $users = $userRepository->findAll();
         }
+
         return $this->render('admin/list.html.twig', [
             'users' => $users,
             'search' => $search,
