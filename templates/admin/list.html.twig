@@ -72,6 +72,13 @@
     {% endfor %}
     </tbody>
 </table>
+
+        <div>
+            <a href="{{ path('app_register') }}" class="link">
+                <i></i> Ajouter un profil utilisateur
+            </a>
+        </div>
+
     {% else %}
         {# Message si l'utilisateur n'est pas Admin #}
         <p>Accès refusé. Vous devez être administrateur pour voir cette page.</p>

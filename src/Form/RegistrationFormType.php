@@ -38,27 +38,36 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Téléphone'])
 
             ->add('email', EmailType::class, [
-                'label' => 'Email'])
+                'label' => 'Email',
+                'attr' => [
+                    // Une valeur arbitraire force le navigateur à renoncer au pré-remplissage automatique
+                    'autocomplete' => 'new-user-email',
+                ]
+            ])
 
-            ->add('plainPassword', RepeatedType::class, options: [
+            ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmer le mot de passe'],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                    'attr' => ['autocomplete' => 'new-password'], // Placé ici pour le premier champ !
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer le mot de passe',
+                    'attr' => ['autocomplete' => 'new-password'], // Placé ici pour le second champ !
+                ],
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new NotBlank(
-                        message: 'Entrer son mot de passe',
-                    ),
-                    new Length(
-                        min: 6,
-                        max: 4096,
-                        // max length allowed by Symfony for security reasons
-                        minMessage: 'Votre mot de passe doit avoir au moins 6 caractères',
-                    ),
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un mot de passe',
+                    ]),
+                    new Length([
+                        'min' => 6,
+                        'max' => 4096,
+                        'minMessage' => 'Votre mot de passe doit avoir au moins 6 caractères',
+                    ]),
                 ],
             ])
 

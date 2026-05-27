@@ -4,11 +4,11 @@
 
 {% block body %}
     {% if is_granted("ROLE_ADMIN") %}
-    <h1>Créer son compte</h1>
+    <h1>Créer un compte</h1>
 
     {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
+    {{ form_start(registrationForm, {'attr': {'autocomplete': 'off'}}) }}
 
         {{ form_row(registrationForm.alias) }}
 
