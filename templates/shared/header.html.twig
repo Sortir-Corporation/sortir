@@ -31,6 +31,8 @@
                     </a>
                 </li>
                 {% endif %}
+
+
                     <li>
                         {% if app.user %}
                             <a href="{{ path('user_details', {id: app.user.id}) }}"
